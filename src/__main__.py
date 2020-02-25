@@ -1,14 +1,12 @@
-from shunting import shunting
+from compile import match
 
 
 def main():
-    # infix = "(a|b).c*"
-    # print("Expected:", "ab|c*.")
+    regexp = input("Enter regex: ")
+    string = input("Enter string: ")
 
-    infix = input("Enter regex:")
-
-    print("Input (infix):", infix)
-    print("Output: (postfix):", shunting(infix))
+    is_match = match(regexp, string)
+    print("\n", is_match)
 
 
 if __name__ == "__main__":
