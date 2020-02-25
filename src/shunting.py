@@ -1,7 +1,8 @@
-""" The Shunting Yard Algorithm for regular expressions. """
-
-
 def shunting(infix):
+    """ 
+    The Shunting Yard Algorithm for regular expressions.
+    """
+
     # Convert input to a stack-ish list
     infix = list(infix)[::-1]
 
@@ -33,7 +34,7 @@ def shunting(infix):
         elif c in prec:
             # Push any operators on the opers stack with higher prec to the output
             while opers and prec[c] < prec[opers[-1]]:
-                postfix.append(opers.push())
+                postfix.append(opers.pop())
             # Push c to the operators stack
             opers.append(c)
         else:
@@ -46,5 +47,4 @@ def shunting(infix):
 
     # Convert output list to a string
     postfix = "".join(postfix)
-
     return postfix

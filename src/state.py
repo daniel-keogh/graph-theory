@@ -7,7 +7,7 @@ class State:
         self.label = label
 
 
-class Frag:
+class Fragment:
     def __init__(self, start, accept):
         self.start = start
         self.accept = accept
