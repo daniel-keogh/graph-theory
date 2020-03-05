@@ -1,12 +1,8 @@
-from compile import match
+from args import parse
 
 
 def main():
-    regexp = input("Enter regex: ")
-    string = input("Enter string: ")
-
-    is_match = match(regexp, string)
-    print("\n", is_match)
+    parse()
 
 
 if __name__ == "__main__":
