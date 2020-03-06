@@ -3,20 +3,27 @@ import argparse
 
 def parse():
     parser = argparse.ArgumentParser(
+        prog='match',
         description="""Check if a regular expression matches a string of text, 
             using Thompson's Construction Algorithm."""
     )
 
     parser.add_argument(
-        'regexp',
+        '-r',
+        '--regexp',
         type=str,
-        help='The regular expression to match'
+        metavar='\b',
+        required=True,
+        help='the regular expression to match'
     )
 
     parser.add_argument(
-        'text',
+        '-t',
+        '--text',
         type=str,
-        help='The string to match the regular expression against'
+        metavar='\b',
+        required=True,
+        help='the string to match the regular expression against'
     )
 
-    parser.parse_args()
+    return parser.parse_args()

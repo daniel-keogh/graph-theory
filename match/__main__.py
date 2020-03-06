@@ -1,11 +1,10 @@
 from args import parse
 from regex import match
 
-
 def main():
-    # parse()
-
-    is_match = match("a.b|b*", "bbbbbbbb")
+    args = parse()
+    
+    is_match = match(args.regexp, args.text)
     print(is_match)
 
 
