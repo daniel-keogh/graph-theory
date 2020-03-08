@@ -7,13 +7,15 @@ Y3S2 Graph Theory Project
 A Python programme that can build a non-deterministic finite automaton (NFA) from a regular expression, and
 can use the NFA to check if the regular expression matches any given string of text.
 
-## Usage
+## Running
+
+### Usage
 
 ```sh
 match [-h] -r REGEXP -t TEXT
 ```
 
-### Arguments
+#### Arguments
 
 | Argument | Descripion |
 | -------- | ---------- |
@@ -23,8 +25,27 @@ match [-h] -r REGEXP -t TEXT
 
 #### Example
 
+From inside the root of the repository, run:
+
 ```sh
-$ python3 match -r a.b|b* -t bbbbbbbb
+$ python -m match -r "a.b|b*" -t "bbbbbbbb"
 
 True
+```
+
+## Tests
+
+From inside the root of the repository, run:
+
+```sh
+$ python tests
+```
+
+## Docs
+
+Documentation can be generated as follows:
+
+```sh
+$ cd docs/
+$ make html
 ```
