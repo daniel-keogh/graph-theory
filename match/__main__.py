@@ -1,9 +1,12 @@
-from args import parse
-from regex import match
+#!/usr/bin/env python3
+
+from .cli import parse
+from .regex import match
+
 
 def main():
     args = parse()
-    
+
     is_match = match(args.regexp, args.text)
     print(is_match)
 

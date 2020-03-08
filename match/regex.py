@@ -1,5 +1,5 @@
-from state import Fragment, State
-from shunting import shunting
+from .state import Fragment, State
+from .shunting import shunting
 
 
 def compile(infix):
