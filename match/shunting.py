@@ -1,50 +1,54 @@
-def shunting(infix):
-    """ 
-    The Shunting Yard Algorithm for regular expressions.
+from .helpers import check_parens
+
+
+def shunting(infix: str) -> str:
+    """
+    Converts a string `infix` from infix notation to postfix notation, also
+    known as Reverse Polish Notation, using Dijkstra's Shunting Yard Algorithm.
+
+    Example:
+        `(a|b).c*` -> `ab|c*.`
     """
 
-    # Convert input to a stack-ish list
-    infix = list(infix)[::-1]
+    # Make sure any brackets in the infix expression are balanced
+    if not check_parens(infix):
+        raise ValueError("infix is not a valid expresion")
 
-    # Operator stack
-    opers = []
+    opers = []      # Operator stack
+    postfix = []    # Output list
 
-    # Output list
-    postfix = []
+    # Dictionary of operator precedence
+    prec = {
+        '*': 100,
+        '.': 80,
+        '|': 60,
+        '(': 40,
+        ')': 20
+    }
 
-    # Operator precedence
-    prec = {'*': 100, '.': 80, '|': 60, '(': 40, ')': 20}
+    infix = list(infix)[::-1]        # Convert infix string to a list
 
-    # Loop through the input one character at a time
+    # Loop through the input & decide what to do for each (c)haracter
     while infix:
-        # Pop a character from the input
-        c = infix.pop()
+        c = infix.pop()              # Pop a character from the input
 
-        # Decide what to do based on the character
-        if c == '(':
-            # Push an open bracket to the opers stack
-            opers.append(c)
-        elif c == ')':
-            # Pop the operators stack until you find an open bracket
-            while opers[-1] != '(':
-                postfix.append(opers.pop())
+        if c in prec:
+            if c == '(':
+                opers.append(c)      # Push open bracket to the `opers` stack
+            elif c == ')':
+                # Pop until an open bracket is found
+                while opers[-1] != '(':
+                    postfix.append(opers.pop())
 
-            # Get rid of the open bracket
-            opers.pop()
-        elif c in prec:
-            # Push any operators on the opers stack with higher prec to the output
-            while opers and prec[c] < prec[opers[-1]]:
-                postfix.append(opers.pop())
-            # Push c to the operators stack
-            opers.append(c)
+                del opers[-1]        # Delete the open bracket
+            else:
+                # Push any operators with higher precedence to the output
+                while opers and prec[c] < prec[opers[-1]]:
+                    postfix.append(opers.pop())
+                
+                opers.append(c)      # Push `c` to the operators stack
         else:
-            # Typically we just push the character to the output
-            postfix.append(c)
+            postfix.append(c)        # Push `c` to the output
 
-    # Pop all the operators to the ouput
-    while (opers):
-        postfix.append(opers.pop())
-
-    # Convert output list to a string
-    postfix = "".join(postfix)
-    return postfix
+    postfix.extend(opers[::-1])      # Append all the operators to the output
+    return ''.join(postfix)          # Return output list as a string
