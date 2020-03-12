@@ -1,4 +1,4 @@
-"""Module providing a collection of helper functions."""
+""" Module providing a collection of helper functions. """
 
 
 def check_parens(exp: str) -> bool:

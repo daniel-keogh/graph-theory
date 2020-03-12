@@ -1,3 +1,5 @@
+""" Main entry-point to the application. """
+
 import sys
 
 from .cli import parse
@@ -8,6 +10,11 @@ from .regex import (
 
 
 def main():
+    """
+    Main entry-point to the application. This function parses the user's
+    command line arguments and prints the result to the console.
+    """
+
     args = parse()
 
     try:

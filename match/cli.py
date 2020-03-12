@@ -1,3 +1,5 @@
+""" Command Line Interface for the application. """
+
 from argparse import (
     ArgumentParser,
     Namespace
@@ -5,6 +7,18 @@ from argparse import (
 
 
 def parse() -> Namespace:
+    """
+    Parses the command line arguments using `argparse` and returns a 
+    `argparse.Namespace` back to the caller from where the parsed argument 
+    values can be retrieved.
+
+    Example:
+        ```
+        args = parse()
+        print(args.regexp)
+        ```
+    """
+    
     parser = ArgumentParser(
         prog='match',
         description="""Check if a regular expression matches a string of text, 

@@ -1,3 +1,5 @@
+""" Module containing an implementation of the Shunting Yard Algorithm. """
+
 from .helpers import check_parens
 
 
