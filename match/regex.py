@@ -6,7 +6,7 @@ from .state import (
 )
 
 
-class InvalidRegexpError(Exception):
+class InvalidRegexpError(ValueError):
     """
     Raised to indicate a string is not a valid regular expression, and is
     therefore unable to be compiled into a NFA.

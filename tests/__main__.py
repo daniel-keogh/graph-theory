@@ -1,25 +1,37 @@
 #!/usr/bin/env python3
 
+import unittest
+
 # Allow executing this module directly: https://stackoverflow.com/a/9806045
 import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from match.regex import match
+from match.shunting import shunting
+
+
+class MatchTest(unittest.TestCase):
+    def test_match(self):
+        self.assertTrue(match("a.b|b*", "bbbbbbb"))
+
+    def test_fail(self):
+        self.assertFalse(match("a.b|b*", "bbx"))
+
+    def test_concat(self):
+        self.assertTrue(match("b*", ""))
+
+    def test_empty(self):
+        self.assertTrue(match("b*", ""))
+
+
+class ShuntingTest(unittest.TestCase):
+    def test_shunting(self):
+        self.assertEqual(shunting("(a|b).c*"), "ab|c*.")
+
+    def test_parens(self):
+        self.assertRaises(ValueError, shunting, "(a|b)))")
 
 
 if __name__ == '__main__':
-    tests = [
-        ["a.b|b*", "bbbbbbb", True],
-        ["a.b|b*", "bbx", False],
-        ["a.b", "ab", True],
-        ["b*", "", True]
-    ]
-
-    for i, test in enumerate(tests):
-        try:
-            assert match(test[0], test[1]) == test[2], \
-                f"{test[0]} {'should' if test[2] else 'should not'} match {test[1]}"
-        except AssertionError as err:
-            print(f"Test no. {i + 1} Failed: {err}\n", file=sys.stderr)
-        else:
-            print(f"Test no. {i + 1} Passed.")
+    unittest.main()

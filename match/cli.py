@@ -11,12 +11,6 @@ def parse() -> Namespace:
     Parses the command line arguments using `argparse` and returns a 
     `argparse.Namespace` back to the caller from where the parsed argument 
     values can be retrieved.
-
-    Example:
-        ```
-        args = parse()
-        print(args.regexp)
-        ```
     """
     
     parser = ArgumentParser(
