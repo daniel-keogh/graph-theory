@@ -1,18 +1,22 @@
-import argparse
+from argparse import (
+    ArgumentParser,
+    Namespace
+)
 
 
-def parse():
-    parser = argparse.ArgumentParser(
+def parse() -> Namespace:
+    parser = ArgumentParser(
         prog='match',
         description="""Check if a regular expression matches a string of text, 
-            using Thompson's Construction Algorithm."""
+            using Thompson's Construction Algorithm.""",
+        usage='match -r REGEXP -t TEXT',
     )
 
     parser.add_argument(
         '-r',
         '--regexp',
         type=str,
-        metavar='\b',
+        metavar='',
         required=True,
         help='the regular expression to match'
     )
@@ -21,7 +25,7 @@ def parse():
         '-t',
         '--text',
         type=str,
-        metavar='\b',
+        metavar='',
         required=True,
         help='the string to match the regular expression against'
     )
