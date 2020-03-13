@@ -7,15 +7,15 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from match.shunting import shunting
+from match.shunting_yard import shunt
 
 
 class ShuntingTest(unittest.TestCase):
     def test_shunting(self):
-        self.assertEqual(shunting("(a|b).c*"), "ab|c*.")
+        self.assertEqual(shunt("(a|b).c*"), "ab|c*.")
 
     def test_unbalanced_parens(self):
-        self.assertRaises(ValueError, shunting, "(a|b)))")
+        self.assertRaises(ValueError, shunt, "(a|b)))")
 
 
 if __name__ == '__main__':

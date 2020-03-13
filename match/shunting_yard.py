@@ -1,9 +1,9 @@
 """ Module containing an implementation of the Shunting Yard Algorithm. """
 
-from .helpers import check_parens
+from .helpers import has_balanced_parens
 
 
-def shunting(infix: str) -> str:
+def shunt(infix: str) -> str:
     """
     Converts a string `infix` from infix notation to postfix notation, also
     known as Reverse Polish Notation, using Dijkstra's Shunting Yard Algorithm.
@@ -13,7 +13,7 @@ def shunting(infix: str) -> str:
     """
 
     # Make sure any brackets in the infix expression are balanced
-    if not check_parens(infix):
+    if not has_balanced_parens(infix):
         raise ValueError("infix is not a valid expresion")
 
     opers = []      # Operator stack
@@ -28,17 +28,17 @@ def shunting(infix: str) -> str:
         ')': 20
     }
 
-    infix = list(infix)[::-1]        # Convert infix string to a list
+    infix = list(infix)[::-1]        # Convert infix string to a stack/list
 
-    # Loop through the input & decide what to do for each (c)haracter
+    # Loop through the input & decide what to do for each character
     while infix:
-        c = infix.pop()              # Pop a character from the input
+        c = infix.pop()
 
         if c in prec:
             if c == '(':
-                opers.append(c)      # Push open bracket to the `opers` stack
+                opers.append(c)
             elif c == ')':
-                # Pop until an open bracket is found
+                # Keep popping until an open bracket is found
                 while opers[-1] != '(':
                     postfix.append(opers.pop())
 
@@ -48,7 +48,7 @@ def shunting(infix: str) -> str:
                 while opers and prec[c] < prec[opers[-1]]:
                     postfix.append(opers.pop())
                 
-                opers.append(c)      # Push `c` to the operators stack
+                opers.append(c)
         else:
             postfix.append(c)        # Push `c` to the output
 

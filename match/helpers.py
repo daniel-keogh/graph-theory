@@ -1,7 +1,7 @@
 """ Module providing a collection of helper functions. """
 
 
-def check_parens(exp: str) -> bool:
+def has_balanced_parens(exp: str) -> bool:
     """
     Checks if the parentheses in the given expression `exp` are balanced.
     Only works for expressions parenthesised with '( )'.

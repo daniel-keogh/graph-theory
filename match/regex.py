@@ -1,4 +1,4 @@
-from .shunting import shunting
+from .shunting_yard import shunt
 from .state import (
     EPSILON,
     Fragment,
@@ -27,7 +27,7 @@ def compile_regex(regex: str) -> Fragment:
     # Turn the (infix) regular expression into postfix/RPN, since it's easier
     # to turn a postfix expression into a NFA
     try:
-        postfix = shunting(regex)
+        postfix = shunt(regex)
         postfix = list(postfix)[::-1]
     except ValueError as err:
         raise InvalidRegexError from err
