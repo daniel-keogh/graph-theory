@@ -37,29 +37,31 @@ def compile_regex(regex: str) -> Fragment:
     while postfix:
         c = postfix.pop()
 
-        if c == '.':
+        if c in ('.', '|'):
+            # If a binary operator is read, there should be at least two
+            # Fragments in the `nfa_stack`.
+            if len(nfa_stack) < 2:
+                raise InvalidRegexError
+
             # Pop two fragments off the stack
             frag1 = nfa_stack.pop()
             frag2 = nfa_stack.pop()
 
-            # Point frag2's accept state at frag1's start state
-            frag2.accept.edges.append(frag1.start)
+            if c == '.':
+                # Point frag2's accept state at frag1's start state
+                frag2.accept.edges.append(frag1.start)
 
-            # Create new start & accept states
-            start = frag2.start
-            accept = frag1.accept
-        elif c == '|':
-            # Pop two fragments off the stack
-            frag1 = nfa_stack.pop()
-            frag2 = nfa_stack.pop()
+                # Create new start & accept states
+                start = frag2.start
+                accept = frag1.accept
+            else:
+                # Create new start & accept states
+                accept = State()
+                start = State(edges=[frag2.start, frag1.start])
 
-            # Create new start & accept states
-            accept = State()
-            start = State(edges=[frag2.start, frag1.start])
-
-            # Point the old accept states at the new one
-            frag2.accept.edges.append(accept)
-            frag1.accept.edges.append(accept)
+                # Point the old accept states at the new one
+                frag2.accept.edges.append(accept)
+                frag1.accept.edges.append(accept)
         elif c == '*':
             # Pop a single fragment off the stack
             frag = nfa_stack.pop()
