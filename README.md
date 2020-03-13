@@ -12,14 +12,14 @@ can use the NFA to check if the regular expression matches any given string of t
 ### Usage
 
 ```sh
-match [-h] -r REGEXP -t TEXT
+match -r REGEX -t TEXT
 ```
 
 #### Arguments
 
-| Argument | Descripion |
+| Argument | Description |
 | -------- | ---------- |
-| `-r/--regexp` | The regular expression to match. |
+| `-r/--regex` | The regular expression to match. |
 | `-t/--text` | The string of text to match the regular expression against. |
 | `-h/--help` | Prints some help text. |
 
@@ -28,7 +28,7 @@ match [-h] -r REGEXP -t TEXT
 From inside the root of the repository, run:
 
 ```sh
-$ python -m match -r "a.b|b*" -t "bbbbbbbb"
+$ python3 -m match -r "a.b|b*" -t "bbbbbbbb"
 
 True
 ```
@@ -38,7 +38,8 @@ True
 From inside the root of the repository, run:
 
 ```sh
-$ python tests
+$ cd tests/
+$ python3 <file_name>
 ```
 
 ## Docs
