@@ -1,28 +1,25 @@
 """ Command Line Interface for the application. """
 
-from argparse import (
-    ArgumentParser,
-    Namespace
-)
+import argparse
 
 
-def parse() -> Namespace:
+def parse() -> argparse.Namespace:
     """
     Parses the command line arguments using `argparse` and returns a 
     `argparse.Namespace` back to the caller from where the parsed argument 
     values can be retrieved.
     """
     
-    parser = ArgumentParser(
+    parser = argparse.ArgumentParser(
         prog='match',
         description="""Check if a regular expression matches a string of text, 
             using Thompson's Construction Algorithm.""",
-        usage='match -r REGEXP -t TEXT',
+        usage='match -r REGEX -t TEXT',
     )
 
     parser.add_argument(
         '-r',
-        '--regexp',
+        '--regex',
         type=str,
         metavar='',
         required=True,

@@ -5,7 +5,7 @@ import sys
 from .cli import parse
 from .regex import (
     match,
-    InvalidRegexpError
+    InvalidRegexError
 )
 
 
@@ -15,12 +15,12 @@ def main():
     command line arguments and prints the result to the console.
     """
 
-    args = parse()
-
     try:
-        is_match = match(args.regexp, args.text)
+        args = parse()
+
+        is_match = match(args.regex, args.text)
         print(is_match)
-    except InvalidRegexpError as err:
+    except InvalidRegexError as err:
         print(f"[Error]: {err}.", file=sys.stderr)
     except Exception as err:
         print(f"[Error]: {type(err).__name__} - {err}.", file=sys.stderr)
