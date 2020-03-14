@@ -1,3 +1,27 @@
+"""This module provides functions for compiling a regular expression into an
+NFA and checking if that NFA matches a given search string.
+
+**Supported Operators**:
+    This module supports a limited number of operators, outlined below:
+
+    * ``.`` - Concatenation. Note that this character denotes *explicit*
+        concatenation. (e.g. The regex "h.e.l.l.o" is required to match
+        the string "hello").
+
+    * ``|`` - The OR operator.
+
+    * ``?`` - Indicates an optional character (zero or one occurrences).
+
+    * Repetitions:
+        * ``+`` - The plus symbol indicates one or more occurrences of the
+            preceding character.
+        * ``*`` - The Kleene star indicates zero or more occurrences of the
+            preceding character.
+
+    Unfortunately it is not yet possible to "escape" any of these characters
+    in order to match the literal equivalent.
+"""
+
 from .shunting_yard import shunt
 from .states import (
     EPSILON,
@@ -7,9 +31,8 @@ from .states import (
 
 
 class InvalidRegexError(ValueError):
-    """
-    Raised to indicate a string is not a valid regular expression, and is
-    therefore unable to be compiled into a NFA.
+    """Raised to indicate a string is not a valid regular expression,
+    and is therefore unable to be compiled into a NFA.
     """
 
     # Make this exception always have (an overridable) default message
@@ -19,9 +42,13 @@ class InvalidRegexError(ValueError):
 
 
 def compile_regex(regex: str) -> Fragment:
-    """
-    Compiles a given regular expression in infix notation to a NFA Fragment
+    """Compiles a given regular expression in infix notation to a NFA Fragment
     and returns it.
+
+    :param regex: The (infix) regular expression to be compiled.
+    :return: A :class:`Fragment` that represents the compiled regular
+        expression.
+    :raises InvalidRegexError: If `regex` is not a valid infix regular expression.
     """
 
     # Turn the (infix) regular expression into postfix/RPN, since it's easier
@@ -106,9 +133,14 @@ def compile_regex(regex: str) -> Fragment:
 
 
 def match(regex: str, s: str) -> bool:
-    """
-    This function will return `True` if the regular expression `regexp`
+    """This function will return `True` if the regular expression `regexp`
     (fully) matches the string `s`, and `False` otherwise.
+
+    :param regex: The regular expression to match.
+    :param s: The string to check against the regular expression.
+    :return: `True` if the string `s` matches the regular expression, and
+        `False` otherwise.
+    :raises InvalidRegexError: If the regular expression is an empty string.
     """
 
     if not regex:
@@ -137,7 +169,11 @@ def match(regex: str, s: str) -> bool:
 
 
 def follow_eps(state: State, current: set):
-    """ Adds a state to a set and follows all of the EPSILON arrows """
+    """ Adds a state to a set and follows all of the EPSILON (ε) arrows.
+
+    :param state: A state to follow.
+    :param current: A `set` of the currently visited states.
+    """
 
     # If `state` is already in `current` there is no need to follow
     if state in current:

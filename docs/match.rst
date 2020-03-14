@@ -7,9 +7,10 @@ Submodules
 .. toctree::
 
    match.cli
+   match.helpers
    match.regex
-   match.shunting
-   match.state
+   match.shunting_yard
+   match.states
 
 Module contents
 ---------------

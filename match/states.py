@@ -1,14 +1,16 @@
 """ Classes used in Thompson's Construction. """
 
-
 EPSILON = None
 
 
 class State:
-    """
-    This class represents a state of a Non-deterministic finite automaton (NFA).
+    """This class represents a state of a Non-deterministic finite automaton (NFA).
 
     Every State has 0, 1, or 2 edges from it.
+
+    :param label: The character represented by this State of the automaton.
+    :param edges: The edges this State points to. Each State will
+        have between 0 and 2 edges.
     """
 
     def __init__(self, label: str = EPSILON, edges: list = []):
@@ -21,11 +23,13 @@ class State:
 
 
 class Fragment:
-    """
-    This class represents a fragment of Non-deterministic finite automata.
+    """This class represents a fragment of Non-deterministic finite automata.
     
     A NFA fragment is composed of multiple states, each with a start state and
     an accept state.
+
+    :param start: The Fragment's start state.
+    :param accept: The Fragment's accept state.
     """
 
     def __init__(self, start: State, accept: State):

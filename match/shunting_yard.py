@@ -1,15 +1,20 @@
-""" Module containing an implementation of the Shunting Yard Algorithm. """
+""" Module containing an implementation of Dijkstra's Shunting Yard Algorithm. """
 
 from .helpers import has_balanced_parens
 
 
 def shunt(infix: str) -> str:
-    """
-    Converts a string `infix` from infix notation to postfix notation, also
-    known as Reverse Polish Notation, using Dijkstra's Shunting Yard Algorithm.
+    """Converts a string `infix` from infix notation to postfix notation, also
+    known as Reverse Polish Notation.
 
-    Example:
-        `(a|b).c*` -> `ab|c*.`
+    **Example**::
+
+        >>> shunt("(a|b).c*")
+        'ab|c*.'
+
+    :param infix: An expression written in infix notation.
+    :return: The infix expression converted to postfix.
+    :raises ValueError: If the infix expression has unbalanced parentheses.
     """
 
     # Make sure any brackets in the infix expression are balanced
