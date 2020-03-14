@@ -5,7 +5,7 @@ Y3S2 Graph Theory Project
 ## Description
 
 A Python programme that can build a non-deterministic finite automaton (NFA) from a regular expression, and
-can use the NFA to check if the regular expression matches any given string of text.
+can use the NFA to check if the regular expression matches a given string of text.
 
 ## Running
 
@@ -33,20 +33,34 @@ $ python3 -m match -r "a.b|b*" -t "bbbbbbbb"
 True
 ```
 
-## Tests
+## Installing
 
 From inside the root of the repository, run:
 
 ```sh
-$ cd tests/
-$ python3 <file_name>
+$ pip3 install .
 ```
 
-## Docs
-
-Documentation can be generated as follows:
+Now you should be able to run the package while omitting the `python3`.
 
 ```sh
-$ cd docs/
-$ make html
+$ match --help
+```
+
+### Removing
+
+You can uninstall it again by running `pip3 uninstall match`.
+
+## Testing
+
+### Run All Tests
+
+```sh
+$ python3 -m unittest discover
+```
+
+### Run a Single Test
+
+```sh
+$ python3 tests/[file_name].py
 ```
