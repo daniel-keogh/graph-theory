@@ -89,36 +89,35 @@ def compile_regex(regex: str) -> Fragment:
                 # Point the old accept states at the new one
                 frag2.accept.edges.append(accept)
                 frag1.accept.edges.append(accept)
-        elif c == '*':
+        elif c in ('*', '+', '?'):
+            # If a unary operator is read, there should be at least one
+            # Fragment in the `nfa_stack`.
+            if len(nfa_stack) == 0:
+                raise InvalidRegexError
+
             # Pop a single fragment off the stack
             frag = nfa_stack.pop()
 
-            # Create new start and accept states
-            accept = State()
-            start = State(edges=[frag.start, accept])
+            accept = State()     # New start state
 
-            # Point the arrows
-            frag.accept.edges.extend([frag.start, accept])
-        elif c == '+':
-            # Pop a single fragment off the stack
-            frag = nfa_stack.pop()
+            if c == '*':
+                # Create new accept states
+                start = State(edges=[frag.start, accept])
 
-            # Create new start and accept states
-            accept = State()
-            start = State(edges=[frag.start])
+                # Point this fragments accept to the new accept states
+                frag.accept.edges = [frag.start, accept]
+            elif c == '+':
+                # Create new accept state
+                start = State(edges=[frag.start])
 
-            # Point the arrows
-            frag.accept.edges = [frag.start, accept]
-        elif c == '?':
-            # Pop a single fragment off the stack
-            frag = nfa_stack.pop()
+                # Point this fragments accept to the new accept states
+                frag.accept.edges = [frag.start, accept]
+            else:
+                # Create new accept state
+                start = State(edges=[frag.start, accept])
 
-            # Create new start and accept states
-            accept = State()
-            start = State(edges=[frag.start, accept])
-
-            # Point the fragments accept to the new accept
-            frag.accept.edges = [accept]
+                # Point this fragments acceptor to the new acceptor
+                frag.accept.edges = [accept]
         else:
             accept = State()
             start = State(label=c, edges=[accept])
