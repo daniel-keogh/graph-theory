@@ -22,15 +22,16 @@ def shunt(infix: str) -> str:
     # Dictionary of operator precedence
     prec = {
         '*': 100,
+        '+': 100,
+        '?': 100,
         '.': 80,
         '|': 60,
         '(': 40,
         ')': 20
     }
 
-    infix = list(infix)[::-1]        # Convert infix string to a stack/list
+    infix = list(infix)[::-1]       # Convert infix string to a stack/list
 
-    # Loop through the input & decide what to do for each character
     while infix:
         c = infix.pop()
 
@@ -42,7 +43,7 @@ def shunt(infix: str) -> str:
                 while opers[-1] != '(':
                     postfix.append(opers.pop())
 
-                del opers[-1]        # Delete the open bracket
+                del opers[-1]       # Delete the open bracket
             else:
                 # Push any operators with higher precedence to the output
                 while opers and prec[c] < prec[opers[-1]]:
@@ -50,7 +51,7 @@ def shunt(infix: str) -> str:
                 
                 opers.append(c)
         else:
-            postfix.append(c)        # Push `c` to the output
+            postfix.append(c)       # Push `c` to the output
 
-    postfix.extend(opers[::-1])      # Append all the operators to the output
-    return ''.join(postfix)          # Return output list as a string
+    postfix.extend(opers[::-1])     # Append all the operators to the output
+    return ''.join(postfix)         # Return output list as a string

@@ -72,16 +72,36 @@ def compile_regex(regex: str) -> Fragment:
 
             # Point the arrows
             frag.accept.edges.extend([frag.start, accept])
+        elif c == '+':
+            # Pop a single fragment off the stack
+            frag = nfa_stack.pop()
+
+            # Create new start and accept states
+            accept = State()
+            start = State(edges=[frag.start])
+
+            # Point the arrows
+            frag.accept.edges = [frag.start, accept]
+        elif c == '?':
+            # Pop a single fragment off the stack
+            frag = nfa_stack.pop()
+
+            # Create new start and accept states
+            accept = State()
+            start = State(edges=[frag.start, accept])
+
+            # Point the fragments accept to the new accept
+            frag.accept.edges = [accept]
         else:
             accept = State()
             start = State(label=c, edges=[accept])
 
-        # Create new instance of Fragment to represent the new NFA
+        # Create new instance of Fragment to represent the new NFA,
+        # and push to the NFA stack.
         new_frag = Fragment(start, accept)
-
-        # Push the new NFA to the NFA stack
         nfa_stack.append(new_frag)
-    # The postfix should be empty & the NFA stack should only have one NFA on it.
+
+    # `postfix` should be empty & the NFA stack should now only have one NFA on it.
     return nfa_stack.pop()
 
 
