@@ -21,7 +21,13 @@ class MatchTest(unittest.TestCase):
         self.assertFalse(match("a.b|b*", "bbx"))
 
     def test_concat(self):
-        self.assertTrue(match("a.b", "ab"))
+        self.assertTrue(match("h.e.l.l.o", "hello"))
+
+    def test_plus(self):
+        self.assertTrue(match("(a.b)+", "abab"))
+
+    def test_optional(self):
+        self.assertTrue(match("a?.b", "b"))
 
     def test_group(self):
         self.assertTrue(match("(a.b)*", "ababab"))
@@ -29,8 +35,11 @@ class MatchTest(unittest.TestCase):
     def test_invalid_re(self):
         self.assertRaises(InvalidRegexError, match, ".a|b", "a")
 
-    def test_empty(self):
+    def test_empty_kleene(self):
         self.assertTrue(match("b*", ""))
+
+    def test_empty_plus(self):
+        self.assertFalse(match("b+", ""))
 
 
 if __name__ == '__main__':
