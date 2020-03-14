@@ -1,5 +1,5 @@
 from .shunting_yard import shunt
-from .state import (
+from .states import (
     EPSILON,
     Fragment,
     State
@@ -81,7 +81,6 @@ def compile_regex(regex: str) -> Fragment:
 
         # Push the new NFA to the NFA stack
         nfa_stack.append(new_frag)
-
     # The postfix should be empty & the NFA stack should only have one NFA on it.
     return nfa_stack.pop()
 
@@ -109,7 +108,7 @@ def match(regex: str, s: str) -> bool:
         current = set()
 
         for state in previous:
-            # Only follow arrows not labeled by EPSILON and equal to `c`
+            # Only follow arrows not labeled by EPSILON, and equal to `c`
             if state.label == c and c is not EPSILON:
                 # Add the state at the end of the arrow to `current`
                 follow_eps(state.edges[0], current)

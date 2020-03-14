@@ -16,7 +16,8 @@ class State:
         self.label = label
 
     def __repr__(self):
-        return f"State: {{label={self.label}, edges={self.edges}}}"
+        edges = [e.label for e in self.edges]
+        return f"State:{{label={self.label}, edges={edges}}}"
 
 
 class Fragment:
@@ -32,4 +33,6 @@ class Fragment:
         self.accept = accept
 
     def __repr__(self):
-        return f"Fragment: {{start={self.start}, accept={self.accept}}}"
+        return f"Fragment:{{" \
+               f"\n  start={self.start}" \
+               f"\n  accept={self.accept}\n}}"
