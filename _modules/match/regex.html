@@ -1,0 +1,274 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>match.regex &#8212; match 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for match.regex</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module provides functions for compiling a regular expression into an</span>
+<span class="sd">NFA and checking if that NFA matches a given search string.</span>
+
+<span class="sd">**Supported Operators**:</span>
+<span class="sd">    This module supports a limited number of operators, outlined below:</span>
+
+<span class="sd">    * ``.`` - Concatenation. Note that this character denotes *explicit*</span>
+<span class="sd">        concatenation. (e.g. The regex &quot;h.e.l.l.o&quot; is required to match</span>
+<span class="sd">        the string &quot;hello&quot;).</span>
+
+<span class="sd">    * ``|`` - The OR operator.</span>
+
+<span class="sd">    * ``?`` - Indicates an optional character (zero or one occurrences).</span>
+
+<span class="sd">    * Repetitions:</span>
+<span class="sd">        * ``+`` - The plus symbol indicates one or more occurrences of the</span>
+<span class="sd">            preceding character.</span>
+<span class="sd">        * ``*`` - The Kleene star indicates zero or more occurrences of the</span>
+<span class="sd">            preceding character.</span>
+
+<span class="sd">    Unfortunately it is not yet possible to &quot;escape&quot; any of these characters</span>
+<span class="sd">    in order to match the literal equivalent.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.shunting_yard</span> <span class="kn">import</span> <span class="n">shunt</span>
+<span class="kn">from</span> <span class="nn">.states</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EPSILON</span><span class="p">,</span>
+    <span class="n">Fragment</span><span class="p">,</span>
+    <span class="n">State</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="InvalidRegexError"><a class="viewcode-back" href="../../match.regex.html#match.regex.InvalidRegexError">[docs]</a><span class="k">class</span> <span class="nc">InvalidRegexError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised to indicate a string is not a valid regular expression,</span>
+<span class="sd">    and is therefore unable to be compiled into a NFA.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Make this exception always have (an overridable) default message</span>
+    <span class="c1"># Ref: https://stackoverflow.com/a/56967197</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s1">&#39;Invalid regular expression&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compile_regex"><a class="viewcode-back" href="../../match.regex.html#match.regex.compile_regex">[docs]</a><span class="k">def</span> <span class="nf">compile_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fragment</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Compiles a given regular expression in infix notation to a NFA Fragment</span>
+<span class="sd">    and returns it.</span>
+
+<span class="sd">    :param regex: The (infix) regular expression to be compiled.</span>
+<span class="sd">    :return: A :class:`Fragment` that represents the compiled regular</span>
+<span class="sd">        expression.</span>
+<span class="sd">    :raises InvalidRegexError: If `regex` is not a valid infix regular expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Turn the (infix) regular expression into postfix/RPN, since it&#39;s easier</span>
+    <span class="c1"># to turn a postfix expression into a NFA</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">postfix</span> <span class="o">=</span> <span class="n">shunt</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+        <span class="n">postfix</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">postfix</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidRegexError</span> <span class="kn">from</span> <span class="nn">err</span>
+
+    <span class="n">nfa_stack</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">while</span> <span class="n">postfix</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">postfix</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">):</span>
+            <span class="c1"># If a binary operator is read, there should be at least two</span>
+            <span class="c1"># Fragments in the `nfa_stack`.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nfa_stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidRegexError</span>
+
+            <span class="c1"># Pop two fragments off the stack</span>
+            <span class="n">frag1</span> <span class="o">=</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">frag2</span> <span class="o">=</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
+                <span class="c1"># Point frag2&#39;s accept state at frag1&#39;s start state</span>
+                <span class="n">frag2</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frag1</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+
+                <span class="c1"># Create new start &amp; accept states</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">frag2</span><span class="o">.</span><span class="n">start</span>
+                <span class="n">accept</span> <span class="o">=</span> <span class="n">frag1</span><span class="o">.</span><span class="n">accept</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Create new start &amp; accept states</span>
+                <span class="n">accept</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag2</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">frag1</span><span class="o">.</span><span class="n">start</span><span class="p">])</span>
+
+                <span class="c1"># Point the old accept states at the new one</span>
+                <span class="n">frag2</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accept</span><span class="p">)</span>
+                <span class="n">frag1</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accept</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">):</span>
+            <span class="c1"># If a unary operator is read, there should be at least one</span>
+            <span class="c1"># Fragment in the `nfa_stack`.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nfa_stack</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidRegexError</span>
+
+            <span class="c1"># Pop a single fragment off the stack</span>
+            <span class="n">frag</span> <span class="o">=</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+            <span class="n">accept</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>     <span class="c1"># New start state</span>
+
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="c1"># Create new accept states</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">])</span>
+
+                <span class="c1"># Point this fragments accept to the new accept states</span>
+                <span class="n">frag</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">:</span>
+                <span class="c1"># Create new accept state</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">])</span>
+
+                <span class="c1"># Point this fragments accept to the new accept states</span>
+                <span class="n">frag</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Create new accept state</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">])</span>
+
+                <span class="c1"># Point this fragments acceptor to the new acceptor</span>
+                <span class="n">frag</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">accept</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">accept</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">accept</span><span class="p">])</span>
+
+        <span class="c1"># Create new instance of Fragment to represent the new NFA,</span>
+        <span class="c1"># and push to the NFA stack.</span>
+        <span class="n">new_frag</span> <span class="o">=</span> <span class="n">Fragment</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">)</span>
+        <span class="n">nfa_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_frag</span><span class="p">)</span>
+
+    <span class="c1"># `postfix` should be empty &amp; the NFA stack should now only have one NFA on it.</span>
+    <span class="k">return</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="match"><a class="viewcode-back" href="../../match.regex.html#match.regex.match">[docs]</a><span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">regex</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This function will return `True` if the regular expression `regexp`</span>
+<span class="sd">    (fully) matches the string `s`, and `False` otherwise.</span>
+
+<span class="sd">    :param regex: The regular expression to match.</span>
+<span class="sd">    :param s: The string to check against the regular expression.</span>
+<span class="sd">    :return: `True` if the string `s` matches the regular expression, and</span>
+<span class="sd">        `False` otherwise.</span>
+<span class="sd">    :raises InvalidRegexError: If the regular expression is an empty string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">regex</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidRegexError</span><span class="p">(</span><span class="s2">&quot;regex cannot be an empty string&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compile the regular expression into an NFA &amp; check if it matches `s`.</span>
+    <span class="n">nfa</span> <span class="o">=</span> <span class="n">compile_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+
+    <span class="n">current</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>     <span class="c1"># The current set of visited states</span>
+
+    <span class="c1"># Add the first state and follow all EPSILON arrows</span>
+    <span class="n">follow_eps</span><span class="p">(</span><span class="n">nfa</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="n">current</span>      <span class="c1"># This keeps track of where we were</span>
+        <span class="c1"># Create a new empty set for states we&#39;re about to be in</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">previous</span><span class="p">:</span>
+            <span class="c1"># Only follow arrows not labeled by EPSILON, and equal to `c`</span>
+            <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">c</span> <span class="ow">and</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">EPSILON</span><span class="p">:</span>
+                <span class="c1"># Add the state at the end of the arrow to `current`</span>
+                <span class="n">follow_eps</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nfa</span><span class="o">.</span><span class="n">accept</span> <span class="ow">in</span> <span class="n">current</span></div>
+
+
+<div class="viewcode-block" id="follow_eps"><a class="viewcode-back" href="../../match.regex.html#match.regex.follow_eps">[docs]</a><span class="k">def</span> <span class="nf">follow_eps</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="nb">set</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Adds a state to a set and follows all of the EPSILON (ε) arrows.</span>
+
+<span class="sd">    :param state: A state to follow.</span>
+<span class="sd">    :param current: A `set` of the currently visited states.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># If `state` is already in `current` there is no need to follow</span>
+    <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">current</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">label</span> <span class="ow">is</span> <span class="n">EPSILON</span><span class="p">:</span>
+        <span class="c1"># Loop through the states pointed to by this state &amp; follow</span>
+        <span class="c1"># all of their EPSILON edges too</span>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="n">follow_eps</span><span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Daniel Keogh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

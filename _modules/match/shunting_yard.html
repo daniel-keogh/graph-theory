@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>match.shunting_yard &#8212; match 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for match.shunting_yard</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Module containing an implementation of Dijkstra&#39;s Shunting Yard Algorithm. &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="shunt"><a class="viewcode-back" href="../../match.shunting_yard.html#match.shunting_yard.shunt">[docs]</a><span class="k">def</span> <span class="nf">shunt</span><span class="p">(</span><span class="n">infix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Converts a string `infix` from infix notation to postfix notation, also</span>
+<span class="sd">    known as Reverse Polish Notation.</span>
+
+<span class="sd">    **Example**::</span>
+
+<span class="sd">        &gt;&gt;&gt; shunt(&quot;(a|b).c*&quot;)</span>
+<span class="sd">        &#39;ab|c*.&#39;</span>
+
+<span class="sd">    :param infix: An expression written in infix notation.</span>
+<span class="sd">    :return: The infix expression converted to postfix.</span>
+<span class="sd">    :raises ValueError: If the infix expression has unbalanced parentheses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Make sure any brackets in the infix expression are balanced</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_balanced_parens</span><span class="p">(</span><span class="n">infix</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;infix is not a valid expresion&quot;</span><span class="p">)</span>
+
+    <span class="n">opers</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># Operator stack</span>
+    <span class="n">postfix</span> <span class="o">=</span> <span class="p">[]</span>    <span class="c1"># Output list</span>
+
+    <span class="c1"># Dictionary of operator precedence</span>
+    <span class="n">prec</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;*&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;+&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;?&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;.&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+        <span class="s1">&#39;|&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+        <span class="s1">&#39;(&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+        <span class="s1">&#39;)&#39;</span><span class="p">:</span> <span class="mi">20</span>
+    <span class="p">}</span>
+
+    <span class="n">infix</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">infix</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>       <span class="c1"># Convert infix string to a stack/list</span>
+
+    <span class="k">while</span> <span class="n">infix</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">infix</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">prec</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span><span class="p">:</span>
+                <span class="n">opers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;)&#39;</span><span class="p">:</span>
+                <span class="c1"># Keep popping until an open bracket is found</span>
+                <span class="k">while</span> <span class="n">opers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;(&#39;</span><span class="p">:</span>
+                    <span class="n">postfix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opers</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+
+                <span class="k">del</span> <span class="n">opers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>       <span class="c1"># Delete the open bracket</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Push any operators with higher precedence to the output</span>
+                <span class="k">while</span> <span class="n">opers</span> <span class="ow">and</span> <span class="n">prec</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">prec</span><span class="p">[</span><span class="n">opers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]:</span>
+                    <span class="n">postfix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opers</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+                
+                <span class="n">opers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">postfix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>       <span class="c1"># Push `c` to the output</span>
+
+    <span class="n">postfix</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">opers</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>     <span class="c1"># Append all the operators to the output</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">postfix</span><span class="p">)</span>         <span class="c1"># Return output list as a string</span></div>
+
+
+<div class="viewcode-block" id="has_balanced_parens"><a class="viewcode-back" href="../../match.shunting_yard.html#match.shunting_yard.has_balanced_parens">[docs]</a><span class="k">def</span> <span class="nf">has_balanced_parens</span><span class="p">(</span><span class="n">exp</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks if the parentheses in the given expression `exp` are balanced,</span>
+<span class="sd">    that is, if each opening parenthesis is matched by a corresponding</span>
+<span class="sd">    closing parenthesis.</span>
+
+<span class="sd">    Only works for expressions parenthesised with ``( )``.</span>
+
+<span class="sd">    :param exp: The expression to check.</span>
+<span class="sd">    :return: `True` if the parentheses are balanced, `False` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Use a stack to determine if the expression is balanced.</span>
+    <span class="c1"># Ref: https://youtu.be/HJOnJU77EUs?t=75 [1:15 - 2:47]</span>
+    <span class="n">paren_stack</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span><span class="p">:</span>
+            <span class="n">paren_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="s1">&#39;)&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">paren_stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">paren_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">paren_stack</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>  <span class="c1"># Only `True` if `paren_stack` is empty</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Daniel Keogh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
