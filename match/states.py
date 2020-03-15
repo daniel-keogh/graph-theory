@@ -1,6 +1,7 @@
 """ Classes used in Thompson's Construction. """
 
 EPSILON = None
+""" An epsilon (ε) represents the empty string. """
 
 
 class State:

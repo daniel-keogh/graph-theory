@@ -5,8 +5,8 @@ NFA and checking if that NFA matches a given search string.
     This module supports a limited number of operators, outlined below:
 
     * ``.`` - Concatenation. Note that this character denotes *explicit*
-        concatenation. (e.g. The regex "h.e.l.l.o" is required to match
-        the string "hello").
+        concatenation. (e.g. The regular expression "h.e.l.l.o" is required
+        in order to match the string "hello").
 
     * ``|`` - The OR operator.
 
@@ -42,17 +42,18 @@ class InvalidRegexError(ValueError):
 
 
 def compile_regex(regex: str) -> Fragment:
-    """Compiles a given regular expression in infix notation to a NFA Fragment
-    and returns it.
+    """Compiles a given regular expression (in infix notation) to a NFA
+    Fragment and returns it.
 
-    :param regex: The (infix) regular expression to be compiled.
+    :param regex: The regular expression to be compiled.
     :return: A :class:`Fragment` that represents the compiled regular
         expression.
-    :raises InvalidRegexError: If `regex` is not a valid infix regular expression.
+    :raises InvalidRegexError: If `regex` is not a valid infix regular
+        expression.
     """
 
     # Turn the (infix) regular expression into postfix/RPN, since it's easier
-    # to turn a postfix expression into a NFA
+    # to turn a postfix expression into a NFA.
     try:
         postfix = shunt(regex)
         postfix = list(postfix)[::-1]
@@ -78,15 +79,17 @@ def compile_regex(regex: str) -> Fragment:
                 # Point frag2's accept state at frag1's start state
                 frag2.accept.edges.append(frag1.start)
 
-                # Create new start & accept states
+                # frag2's start state is the new start state & frag1's
+                # accept state is the new accept state.
                 start = frag2.start
                 accept = frag1.accept
             else:
-                # Create new start & accept states
+                # Create new start & accept states, with the new start
+                # state pointing to the start state of each fragments.
                 accept = State()
                 start = State(edges=[frag2.start, frag1.start])
 
-                # Point the old accept states at the new one
+                # Point the old accept states at the new one.
                 frag2.accept.edges.append(accept)
                 frag1.accept.edges.append(accept)
         elif c in ('*', '+', '?'):
@@ -95,39 +98,41 @@ def compile_regex(regex: str) -> Fragment:
             if len(nfa_stack) == 0:
                 raise InvalidRegexError
 
-            # Pop a single fragment off the stack
-            frag = nfa_stack.pop()
+            frag = nfa_stack.pop()    # Pop a single fragment off the stack
 
-            accept = State()     # New start state
+            accept = State()          # New accept state
 
             if c == '*':
-                # Create new accept states
+                # Create new accept state which points to both the old start
+                # state and the new accept state.
                 start = State(edges=[frag.start, accept])
 
-                # Point this fragments accept to the new accept states
+                # Point the old fragment's accept to the new accept state.
                 frag.accept.edges = [frag.start, accept]
             elif c == '+':
-                # Create new accept state
+                # Create new accept state which points to the old start state.
                 start = State(edges=[frag.start])
 
-                # Point this fragments accept to the new accept states
+                # Point the old fragment's accept to the new accept state.
                 frag.accept.edges = [frag.start, accept]
             else:
-                # Create new accept state
+                # Create the new start state which points to both the old
+                # start state and the new accept state.
                 start = State(edges=[frag.start, accept])
 
-                # Point this fragments acceptor to the new acceptor
+                # Point the old fragment's acceptor to the new accept state.
                 frag.accept.edges = [accept]
         else:
+            # For normal characters, make a new accept state, assign a label,
+            # and then point the start state to the accept state.
             accept = State()
             start = State(label=c, edges=[accept])
 
-        # Create new instance of Fragment to represent the new NFA,
-        # and push to the NFA stack.
+        # Push the new Fragment to the NFA stack.
         new_frag = Fragment(start, accept)
         nfa_stack.append(new_frag)
 
-    # `postfix` should be empty & the NFA stack should now only have one NFA on it.
+    # `postfix` should be empty & NFA stack should only have one item on it.
     return nfa_stack.pop()
 
 
@@ -145,30 +150,31 @@ def match(regex: str, s: str) -> bool:
     if not regex:
         raise InvalidRegexError("regex cannot be an empty string")
 
-    # Compile the regular expression into an NFA & check if it matches `s`.
-    nfa = compile_regex(regex)
-
     current = set()     # The current set of visited states
 
-    # Add the first state and follow all EPSILON arrows
-    follow_eps(nfa.start, current)
+    # Compile the regular expression into an NFA
+    nfa = compile_regex(regex)
+
+    # Add the first state and follow all arrows labelled with the empty string
+    _follow_eps(nfa.start, current)
 
     for c in s:
-        previous = current      # This keeps track of where we were
-        # Create a new empty set for states we're about to be in
+        previous = current     # This keeps track of where we were
+        # Create empty set for states we're about to be in
         current = set()
 
         for state in previous:
-            # Only follow arrows not labeled by EPSILON, and equal to `c`
+            # Only follow arrows labeled by `c`, where c != EPSILON
             if state.label == c and c is not EPSILON:
                 # Add the state at the end of the arrow to `current`
-                follow_eps(state.edges[0], current)
+                _follow_eps(state.edges[0], current)
 
     return nfa.accept in current
 
 
-def follow_eps(state: State, current: set):
-    """ Adds a state to a set and follows all of the EPSILON (ε) arrows.
+def _follow_eps(state: State, current: set):
+    """Adds a state to a set and follows all of the edges labelled by
+    EPSILON (ε).
 
     :param state: A state to follow.
     :param current: A `set` of the currently visited states.
@@ -182,6 +188,6 @@ def follow_eps(state: State, current: set):
 
     if state.label is EPSILON:
         # Loop through the states pointed to by this state & follow
-        # all of their EPSILON edges too
+        # all their EPSILON-labelled edges too
         for vertex in state.edges:
-            follow_eps(vertex, current)
+            _follow_eps(vertex, current)
