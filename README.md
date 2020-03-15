@@ -19,7 +19,7 @@ The program implements only a limited number of operators/metacharacters, namely
 | Operator | Represents |
 | :------: | ---------- |
 | `.` | Concatenation. |
-| `|` | Alternation/Union. |
+| `\|` | Alternation/Union. |
 | `?` | Zero-or-one occurrences of a character. |
 | `+` | One-or-more occurrences of a character. |
 | `*` | Zero-or-more occurrences of a character. |
