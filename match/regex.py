@@ -58,7 +58,7 @@ def compile_regex(regex: str) -> Fragment:
         postfix = shunt(regex)
         postfix = list(postfix)[::-1]
     except ValueError as err:
-        raise InvalidRegexError from err
+        raise InvalidRegexError("Unbalanced parentheses") from err
 
     nfa_stack = []
 
@@ -144,11 +144,13 @@ def match(regex: str, s: str) -> bool:
     :param s: The string to check against the regular expression.
     :return: `True` if the string `s` matches the regular expression, and
         `False` otherwise.
-    :raises InvalidRegexError: If the regular expression is an empty string.
+    :raises InvalidRegexError: If there is an error compiling the regular
+        expresion.
+    :raises ValueError: If the regular expression is an empty string.
     """
 
     if not regex:
-        raise InvalidRegexError("regex cannot be an empty string")
+        raise ValueError("`regex` cannot be an empty string")
 
     current = set()     # The current set of visited states
 

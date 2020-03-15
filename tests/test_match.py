@@ -17,7 +17,7 @@ class MatchTest(unittest.TestCase):
     def test_match(self):
         self.assertTrue(match("a.b|b*", "bbbbbbb"))
 
-    def test_false(self):
+    def test_mismatch(self):
         self.assertFalse(match("a.b|b*", "bbx"))
 
     def test_concat(self):
@@ -32,7 +32,7 @@ class MatchTest(unittest.TestCase):
     def test_group(self):
         self.assertTrue(match("(a.b)*", "ababab"))
 
-    def test_invalid_re(self):
+    def test_invalid_regex(self):
         self.assertRaises(InvalidRegexError, match, ".a|b", "a")
 
     def test_empty_kleene(self):

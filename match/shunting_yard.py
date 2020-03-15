@@ -17,7 +17,7 @@ def shunt(infix: str) -> str:
 
     # Make sure any brackets in the infix expression are balanced
     if not has_balanced_parens(infix):
-        raise ValueError("infix is not a valid expresion")
+        raise ValueError("`infix` has unbalanced parentheses")
 
     opers = []      # Operator stack
     postfix = []    # Output list

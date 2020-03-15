@@ -3,10 +3,7 @@
 import sys
 
 from .cli import parse
-from .regex import (
-    match,
-    InvalidRegexError
-)
+from .regex import match
 
 
 def main():
@@ -20,11 +17,9 @@ def main():
 
         is_match = match(args.regex, args.text)
         print(is_match)
-    except InvalidRegexError as err:
-        print(f"[Error]: {err}.", file=sys.stderr)
     except Exception as err:
         # Print catch-all error message
-        print(f"[Error]: {type(err).__name__} - {err}.", file=sys.stderr)
+        print(f"[{type(err).__name__}]: {err}.", file=sys.stderr)
 
 
 if __name__ == "__main__":
