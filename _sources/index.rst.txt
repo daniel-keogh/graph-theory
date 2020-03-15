@@ -3,11 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to match's documentation!
-=================================
+Graph Theory Project Documentation
+==================================
+
+A Python programme that can build a non-deterministic finite automaton (NFA) from a regular expression, and
+can use the NFA to check if the regular expression matches a given string of text.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    modules
