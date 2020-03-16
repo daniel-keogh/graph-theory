@@ -1,4 +1,5 @@
-"""Command Line Interface for the application.
+"""
+Command Line Interface for the application.
 
     **Options List**:
         -h, --help      Show this help message and exit.
@@ -11,7 +12,8 @@ import argparse
 
 
 def parse() -> argparse.Namespace:
-    """Parses the user's command line arguments using :class:`argparse` and
+    """
+    Parses the user's command line arguments using :class:`argparse` and
     then returns back to the caller an :class:`argparse.Namespace` object that
     contains the user's input arguments.
 

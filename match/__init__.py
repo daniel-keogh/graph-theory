@@ -1,5 +1,6 @@
-"""This package allows you to check if a regular expression matches a given string
-of text. It does this using an algorithm known as Thompson’s construction.
+"""
+This package allows you to check if a regular expression matches a given string
+of text, using an algorithm known as Thompson’s construction.
 
 Thompson's construction is a method of transforming a regular expression into
 an equivalent non-deterministic finite automaton (NFA). The algorithm works

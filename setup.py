@@ -1,4 +1,5 @@
-"""This file is used by pip to install the package.
+"""
+This file is used by pip to install the package.
 
 Reference: https://github.com/pypa/sampleproject/blob/master/setup.py
 """

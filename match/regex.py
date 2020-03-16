@@ -1,25 +1,24 @@
-"""This module provides functions for compiling a regular expression into an
+"""
+This module provides functions for compiling a regular expression into an
 NFA and checking if that NFA matches a given search string.
 
-**Supported Operators**:
-    This module supports a limited number of operators, outlined below:
+Supported Operators
+===================
+    This operators supported by this module are outlined below:
 
     * ``.`` - Concatenation. Note that this character denotes *explicit*
         concatenation. (e.g. The regular expression "h.e.l.l.o" is required
         in order to match the string "hello").
 
-    * ``|`` - The OR operator.
+    * ``|`` - The OR operator represents alternation/union.
 
     * ``?`` - Indicates an optional character (zero or one occurrences).
 
-    * Repetitions:
-        * ``+`` - The plus symbol indicates one or more occurrences of the
-            preceding character.
-        * ``*`` - The Kleene star indicates zero or more occurrences of the
-            preceding character.
+    * ``+`` - The plus symbol indicates one or more occurrences of the
+        preceding character.
 
-    Unfortunately it is not yet possible to "escape" any of these characters
-    in order to match the literal equivalent.
+    * ``*`` - The Kleene star indicates zero or more occurrences of the
+        preceding character.
 """
 
 from .shunting_yard import shunt
@@ -31,7 +30,8 @@ from .states import (
 
 
 class InvalidRegexError(ValueError):
-    """Raised to indicate a string is not a valid regular expression,
+    """
+    Raised to indicate a string is not a valid regular expression,
     and is therefore unable to be compiled into a NFA.
     """
 
@@ -42,7 +42,8 @@ class InvalidRegexError(ValueError):
 
 
 def compile_regex(regex: str) -> Fragment:
-    """Compiles a given regular expression (in infix notation) to a NFA
+    """
+    Compiles a given regular expression (in infix notation) to a NFA
     Fragment and returns it.
 
     :param regex: The regular expression to be compiled.
@@ -95,7 +96,7 @@ def compile_regex(regex: str) -> Fragment:
         elif c in ('*', '+', '?'):
             # If a unary operator is read, there should be at least one
             # Fragment in the `nfa_stack`.
-            if len(nfa_stack) == 0:
+            if len(nfa_stack) < 1:
                 raise InvalidRegexError
 
             frag = nfa_stack.pop()    # Pop a single fragment off the stack
@@ -137,7 +138,8 @@ def compile_regex(regex: str) -> Fragment:
 
 
 def match(regex: str, s: str) -> bool:
-    """This function will return `True` if the regular expression `regexp`
+    """
+    This function will return `True` if the regular expression `regexp`
     (fully) matches the string `s`, and `False` otherwise.
 
     :param regex: The regular expression to match.
@@ -175,7 +177,8 @@ def match(regex: str, s: str) -> bool:
 
 
 def _follow_eps(state: State, current: set):
-    """Adds a state to a set and follows all of the edges labelled by
+    """
+    Adds a state to a set and follows all of the edges labelled by
     EPSILON (ε).
 
     :param state: A state to follow.

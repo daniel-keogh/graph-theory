@@ -7,7 +7,8 @@ from .regex import match
 
 
 def main():
-    """Main entry-point to the application. This function parses
+    """
+    Main entry-point to the application. This function parses
     the user's command line arguments and prints the result of ``match()``
     to the console.
     """

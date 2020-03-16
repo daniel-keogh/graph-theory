@@ -2,7 +2,8 @@
 
 
 def shunt(infix: str) -> str:
-    """Converts a string `infix` from infix notation to postfix notation, also
+    """
+    Converts a string `infix` from infix notation to postfix notation, also
     known as Reverse Polish Notation.
 
     **Example**::
@@ -61,7 +62,8 @@ def shunt(infix: str) -> str:
 
 
 def has_balanced_parens(exp: str) -> bool:
-    """Checks if the parentheses in the given expression `exp` are balanced,
+    """
+    Checks if the parentheses in the given expression `exp` are balanced,
     that is, if each opening parenthesis is matched by a corresponding
     closing parenthesis.
 
