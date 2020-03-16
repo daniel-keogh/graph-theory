@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>match.regex module &#8212; match 1.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -24,31 +24,35 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="match.shunting_yard module" href="match.shunting_yard.html" />
-    <link rel="prev" title="match.cli module" href="match.cli.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="match.cli module" href="match.cli.html" /> 
   </head>
   <body>
-  
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>match 1.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>match.regex module</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="match.cli.html">match.cli module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="match.shunting_yard.html">match.shunting_yard module</a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="module-match.regex">
 <span id="match-regex-module"></span><h1>match.regex module<a class="headerlink" href="#module-match.regex" title="Permalink to this headline">¶</a></h1>
 <p>This module provides functions for compiling a regular expression into an
 NFA and checking if that NFA matches a given search string.</p>
-<dl class="docutils">
-<dt><strong>Supported Operators</strong>:</dt>
-<dd><p class="first">This module supports a limited number of operators, outlined below:</p>
+<div class="section" id="supported-operators">
+<h2>Supported Operators<a class="headerlink" href="#supported-operators" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>This operators supported by this module are outlined below:</p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><code class="docutils literal"><span class="pre">.</span></code> - Concatenation. Note that this character denotes <em>explicit</em></dt>
@@ -56,11 +60,8 @@ NFA and checking if that NFA matches a given search string.</p>
 in order to match the string “hello”).</dd>
 </dl>
 </li>
-<li><code class="docutils literal"><span class="pre">|</span></code> - The OR operator.</li>
+<li><code class="docutils literal"><span class="pre">|</span></code> - The OR operator represents alternation/union.</li>
 <li><code class="docutils literal"><span class="pre">?</span></code> - Indicates an optional character (zero or one occurrences).</li>
-<li><dl class="first docutils">
-<dt>Repetitions:</dt>
-<dd><ul class="first last">
 <li><dl class="first docutils">
 <dt><code class="docutils literal"><span class="pre">+</span></code> - The plus symbol indicates one or more occurrences of the</dt>
 <dd>preceding character.</dd>
@@ -72,14 +73,7 @@ in order to match the string “hello”).</dd>
 </dl>
 </li>
 </ul>
-</dd>
-</dl>
-</li>
-</ul>
-<p class="last">Unfortunately it is not yet possible to “escape” any of these characters
-in order to match the literal equivalent.</p>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="exception">
 <dt id="match.regex.InvalidRegexError">
 <em class="property">exception </em><code class="descclassname">match.regex.</code><code class="descname">InvalidRegexError</code><span class="sig-paren">(</span><em>msg='Invalid regular expression'</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#match.regex.InvalidRegexError" title="Permalink to this definition">¶</a></dt>
@@ -140,54 +134,25 @@ expresion.</li>
 </dd></dl>
 
 </div>
-
-
-          </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">match</a><ul>
-  <li><a href="match.html">match package</a><ul>
-      <li>Previous: <a href="match.cli.html" title="previous chapter">match.cli module</a></li>
-      <li>Next: <a href="match.shunting_yard.html" title="next chapter">match.shunting_yard module</a></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
+
+
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2020, Daniel Keogh.
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
       
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/match.regex.rst.txt"
-          rel="nofollow">Page source</a>
+        <p>
+        «&#160;&#160;<a href="match.cli.html">match.cli module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="match.shunting_yard.html">match.shunting_yard module</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Daniel Keogh.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
-
-    
-
-    
   </body>
 </html>
