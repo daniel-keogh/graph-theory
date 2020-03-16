@@ -14,15 +14,15 @@ larger NFAs from those smaller NFA fragments. If the given search string is acce
 
 ### Operators
 
-The program implements only a limited number of operators/metacharacters, namely:
+The program implements the below operators/metacharacters:
 
-| Operator | Represents |
-| :------: | ---------- |
-| `.` | Concatenation. |
-| `\|` | Alternation/Union. |
-| `?` | Zero-or-one occurrences of a character. |
-| `+` | One-or-more occurrences of a character. |
-| `*` | Zero-or-more occurrences of a character. |
+| Operator | Represents | NFA Fragment |
+| :------: | :--------- | :----------: |
+| `.` | Concatenation. | ![concat] |
+| `\|` | Alternation/Union. | ![union] |
+| `?` | Zero-or-one occurrences of a character. | ![optional] |
+| `+` | One-or-more occurrences of a character. | ![plus] |
+| `*` | Zero-or-more occurrences of a character. | ![kleene] |
 
 ## Running
 
@@ -38,7 +38,7 @@ match -r REGEX -t TEXT
 | -------- | ---------- |
 | `-h/--help` | Prints some help text. |
 | `-r/--regex` | The regular expression to match. |
-| `-t/--text` | The string of text to try and match against the regular expression. |
+| `-t/--text` | The string of text you want to try and match against the pattern defined by the regular expression. |
 
 #### Example
 
@@ -102,7 +102,7 @@ You should then be able to run `make html` from within the `docs/` directory.
 - The contents of the `docs/` directory were primarily auto-generated using the `sphinx-quickstart` command,
 followed by `sphinx-apidoc -o . ../match --separate` to create the RST files.
 
-<!-- Images -->
+<!-- Console Images -->
 [run]: https://user-images.githubusercontent.com/37158241/76702521-5a20a980-66c2-11ea-8813-589fd489a5e3.PNG "Running"
 
 [pip]: https://user-images.githubusercontent.com/37158241/76702523-5ab94000-66c2-11ea-8d8d-94b0b57d584e.PNG "PIP Install"
@@ -110,3 +110,14 @@ followed by `sphinx-apidoc -o . ../match --separate` to create the RST files.
 [tests]: https://user-images.githubusercontent.com/37158241/76702524-5b51d680-66c2-11ea-9a2d-e62e9dcf23ce.PNG "Testing"
 
 [docs]: https://user-images.githubusercontent.com/37158241/76702668-75d87f80-66c3-11ea-9db0-50f4fc75f2b8.PNG "Sphinx"
+
+<!-- NFA Images -->
+[union]: https://user-images.githubusercontent.com/37158241/76761641-b13c8200-6787-11ea-8821-7d3c31744855.png "Union"
+
+[kleene]: https://user-images.githubusercontent.com/37158241/76747391-f6a18500-6770-11ea-8104-1d70db17d268.png "Kleene Star"
+
+[concat]: https://user-images.githubusercontent.com/37158241/76760396-7e918a00-6785-11ea-80cf-ea910d507358.png "Concatenation"
+
+[optional]: https://user-images.githubusercontent.com/37158241/76747393-f7d2b200-6770-11ea-9f3b-eed4eb2fbf1a.png "Optional"
+
+[plus]: https://user-images.githubusercontent.com/37158241/76747394-f7d2b200-6770-11ea-8891-2632ec9ccec5.png "Plus Operator"
