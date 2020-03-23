@@ -24,12 +24,12 @@ def shunt(infix: str) -> str:
         >>> shunt("(a|b).c*")
         'ab|c*.'
 
-    **References**
+    **References**:
         Computerphile - `Reverse Polish Notation and The Stack
-            <https://www.youtube.com/watch?v=7ha78yWRDlE>`_
+        <https://www.youtube.com/watch?v=7ha78yWRDlE>`_
 
         Wikipedia - `Reverse Polish notation 
-            <https://en.wikipedia.org/wiki/Reverse_Polish_notation>`_
+        <https://en.wikipedia.org/wiki/Reverse_Polish_notation>`_
 
 
     :param infix: An expression written in infix notation.
