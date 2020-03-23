@@ -52,10 +52,10 @@ NFA and checking if that NFA matches a given search string.</p>
 <div class="section" id="supported-operators">
 <h2>Supported Operators<a class="headerlink" href="#supported-operators" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>This operators supported by this module are outlined below:</p>
+<div><p>The operators supported by this module are outlined below:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">.</span></code> - Concatenation. Note that this character denotes <em>explicit</em></dt>
+<dt><code class="docutils literal"><span class="pre">.</span></code> - Concatenation. Note that this operator denotes <em>explicit</em></dt>
 <dd>concatenation. (e.g. The regular expression “h.e.l.l.o” is required
 in order to match the string “hello”).</dd>
 </dl>
@@ -68,7 +68,7 @@ in order to match the string “hello”).</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">*</span></code> - The Kleene star indicates zero or more occurrences of the</dt>
+<dt><code class="docutils literal"><span class="pre">*</span></code> - The “Kleene star” indicates zero or more occurrences of the</dt>
 <dd>preceding character.</dd>
 </dl>
 </li>
@@ -87,6 +87,18 @@ and is therefore unable to be compiled into a NFA.</p>
 <code class="descclassname">match.regex.</code><code class="descname">compile_regex</code><span class="sig-paren">(</span><em>regex: str</em><span class="sig-paren">)</span> &#x2192; match.states.Fragment<a class="headerlink" href="#match.regex.compile_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles a given regular expression (in infix notation) to a NFA
 Fragment and returns it.</p>
+<p>The compilation process works by first converting <cite>regex</cite> to postfix
+notation and then scanning through the postfix expression, whilst
+maintaining a stack of computed NFA fragments. When a literal character is
+read, a new NFA fragment is pushed onto the stack. Operators meanwhile pop
+fragments off the stack (one fragment for unary operators &amp; two for binary
+operators) and then push a new fragment representing the result of the
+operation. At the end, a single NFA fragment remains which represents the
+compiled regular expression.</p>
+<dl class="docutils">
+<dt><strong>References</strong>:</dt>
+<dd>Cox, Russ - <a class="reference external" href="https://swtch.com/~rsc/regexp/regexp1.html">Regular Expression Matching Can Be Simple And Fast</a></dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -96,8 +108,8 @@ Fragment and returns it.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <code class="xref py py-class docutils literal"><span class="pre">Fragment</span></code> that represents the compiled regular
 expression.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#match.regex.InvalidRegexError" title="match.regex.InvalidRegexError"><strong>InvalidRegexError</strong></a> – If <cite>regex</cite> is not a valid infix regular
-expression.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#match.regex.InvalidRegexError" title="match.regex.InvalidRegexError"><strong>InvalidRegexError</strong></a> – If <cite>regex</cite> is determined to be an invalid infix
+regular expression.</td>
 </tr>
 </tbody>
 </table>

@@ -47,7 +47,8 @@
         
   <div class="section" id="module-match.shunting_yard">
 <span id="match-shunting-yard-module"></span><h1>match.shunting_yard module<a class="headerlink" href="#module-match.shunting_yard" title="Permalink to this headline">¶</a></h1>
-<p>Module containing an implementation of Dijkstra’s Shunting Yard Algorithm.</p>
+<p>Module containing an implementation of Dijkstra’s Shunting Yard Algorithm
+for converting an infix expression to postfix.</p>
 <dl class="function">
 <dt id="match.shunting_yard.has_balanced_parens">
 <code class="descclassname">match.shunting_yard.</code><code class="descname">has_balanced_parens</code><span class="sig-paren">(</span><em>exp: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#match.shunting_yard.has_balanced_parens" title="Permalink to this definition">¶</a></dt>
@@ -71,19 +72,33 @@ closing parenthesis.</p>
 <dt id="match.shunting_yard.shunt">
 <code class="descclassname">match.shunting_yard.</code><code class="descname">shunt</code><span class="sig-paren">(</span><em>infix: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#match.shunting_yard.shunt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a string <cite>infix</cite> from infix notation to postfix notation, also
-known as Reverse Polish Notation.</p>
-<p><strong>Example</strong>:</p>
+known as Reverse Polish Notation (RPN), a mathematical notation in which
+operators follow their operands.</p>
+<p>Expressions written in Reverse Polish can be easily interpreted by
+utilising a stack, and are advantageous as only a single read over
+the expression is required in order to fully evaluate it, saving execution
+time &amp; reducing computer memory access. Also, since the order of operations
+is determined solely by each operator’s respective position in the 
+expression, RPN does not use parentheses to specify the precedence 
+of operators. Hence, they are omitted in the output.</p>
+<p><strong>Example</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shunt</span><span class="p">(</span><span class="s2">&quot;(a|b).c*&quot;</span><span class="p">)</span>
 <span class="go">&#39;ab|c*.&#39;</span>
 </pre></div>
 </div>
+<dl class="docutils">
+<dt><strong>References</strong>:</dt>
+<dd><p class="first">Computerphile - <a class="reference external" href="https://www.youtube.com/watch?v=7ha78yWRDlE">Reverse Polish Notation and The Stack</a></p>
+<p class="last">Wikipedia - <a class="reference external" href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish notation</a></p>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>infix</strong> – An expression written in infix notation.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The infix expression converted to postfix.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The infix expression converted to postfix notation.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – If the infix expression has unbalanced parentheses.</td>
 </tr>
