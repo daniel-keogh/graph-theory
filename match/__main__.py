@@ -1,4 +1,4 @@
-""" Main entry-point to the application. """
+""" Main entry-point to the program. """
 
 import sys
 
@@ -8,9 +8,9 @@ from .regex import match
 
 def main():
     """
-    Main entry-point to the application. This function parses
-    the user's command line arguments and prints the result of ``match()``
-    to the console.
+    Main entry-point to the program. This function parses
+    the user's command line arguments and prints the result of the ``match()``
+    function to the console (either `True` or `False`).
     """
 
     try:

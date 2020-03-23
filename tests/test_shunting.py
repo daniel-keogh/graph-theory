@@ -2,7 +2,8 @@
 
 import unittest
 
-# Allow executing this module directly: https://stackoverflow.com/a/9806045
+# The following enables executing this module directly.
+# Ref: Remi - https://stackoverflow.com/a/9806045
 import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

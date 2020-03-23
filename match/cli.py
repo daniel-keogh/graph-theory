@@ -1,11 +1,10 @@
 """
-Command Line Interface for the application.
+Command Line Interface for the program.
 
     **Options List**:
-        -h, --help      Show this help message and exit.
+        -h, --help      Shows a help message and then exits.
         -r, --regex     The regular expression to match.
         -t, --text      The string to match the regular expression against.
-
 """
 
 import argparse
@@ -18,7 +17,7 @@ def parse() -> argparse.Namespace:
     contains the user's input arguments.
 
     :return: An :class:`argparse.Namespace` object from where the parsed
-        argument values can be read.
+        argument values can be retrieved.
     """
 
     parser = argparse.ArgumentParser(
