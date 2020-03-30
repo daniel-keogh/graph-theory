@@ -15,7 +15,7 @@ If the given search string is accepted by the NFA, the program will output `True
 
 ### Operators
 
-The program implements the below operators/metacharacters:
+The below operators/metacharacters are implemented:
 
 | Operator | Represents | NFA Fragment* |
 | :------: | :--------- | :-----------: |
@@ -25,7 +25,8 @@ The program implements the below operators/metacharacters:
 | `+` | One-or-more occurrences of a character. | ![plus] |
 | `*` | Zero-or-more occurrences of a character. | ![kleene] |
 
-\* NFA fragment diagrams taken from [these slides](https://github.com/ianmcloughlin/slides-thompson/blob/master/slides.pdf) on thompson's construction.
+\* NFA fragment diagrams taken from [these slides](https://github.com/ianmcloughlin/slides-thompson/blob/master/slides.pdf)
+on Thompson's Construction.
 
 ## Running
 
@@ -55,7 +56,7 @@ From inside the root of the repository, run:
 $ sudo pip3 install .
 ```
 
-This will allow you to run the program system-wide & while omitting the `python3 -m`.
+This will allow you to run the program system-wide, while omitting the `python3 -m`.
 
 ![PIP Example][pip]
 
@@ -89,19 +90,22 @@ The documentation for this project is deployed on [GitHub Pages](https://daniel-
 
 ### Building the Docs
 
-**_Note:_** You may first need to install the [Sphinx](https://www.sphinx-doc.org/en/master/) documentation generator. On Debian-based Linux distributions this can be done by running:
+**_Note:_** You may first need to install the [Sphinx](https://www.sphinx-doc.org/en/master/) documentation generator.
+On Debian-based Linux distributions this can be done by running:
 
 ```sh
 $ sudo apt install python3-sphinx
 ```
 
-You should then be able to run `make html` from within the `docs/` directory to reproduce the HTML files.
+You should then be able to run `make html` from within the `docs/` directory to reproduce the HTML files, which are
+placed in the `docs/_build/html` directory.
 
 !["Sphinx Example"][docs]
 
 ### Notes
 
 - The docstrings thoughout this project follow the reStructuredText (reST) format outlined in [PEP 287](https://www.python.org/dev/peps/pep-0287/).
+
 - The contents of the `docs/` directory were mostly auto-generated using the `sphinx-quickstart` command,
 followed by `sphinx-apidoc -o . ../match --separate` to create the RST files.
 
