@@ -16,8 +16,8 @@ class State:
         have between 0 and 2 edges.
     """
 
-    def __init__(self, label: str = EPSILON, edges: list = []):
-        self.edges = edges
+    def __init__(self, label: str = EPSILON, edges: list = None):
+        self.edges = edges if edges else []
         self.label = label
 
     def __repr__(self):

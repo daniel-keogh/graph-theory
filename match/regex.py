@@ -1,6 +1,7 @@
 """
-This module provides functions for compiling a regular expression into an
-NFA and checking if that NFA matches a given search string.
+This module provides functions for compiling a regular expression into a
+non-deterministic finite automaton (NFA) and checking if that NFA matches
+a given search string.
 
 Supported Operators
 ===================
@@ -47,19 +48,21 @@ def compile_regex(regex: str) -> Fragment:
     Fragment and returns it. 
 
     The compilation process works by first converting `regex` to postfix
-    notation and then scanning through the postfix expression, whilst
-    maintaining a stack of computed NFA fragments. When a literal character is
-    read, a new NFA fragment is pushed onto the stack. Operators meanwhile pop
-    fragments off the stack (one fragment for unary operators & two for binary
-    operators) and then push a new fragment representing the result of the
-    operation. At the end, a single NFA fragment remains which represents the
-    compiled regular expression.
+    notation and then scanning through the postfix expression while
+    maintaining a stack of computed NFA fragments. When a literal character
+    is read, a new NFA fragment representing that character is pushed onto
+    the stack. If an operator is read, fragments are popped off the stack
+    (one fragment for unary operators & two for binary operators) and then
+    a new fragment representing the result of the operation is pushed back
+    onto the stack. At the end, a single NFA :class:`Fragment` is returned
+    which represents the compiled regular expression.
     
-    **References**:
-        Cox, Russ - `Regular Expression Matching Can Be Simple And Fast
-        <https://swtch.com/~rsc/regexp/regexp1.html>`_
+    **References & Further Info:**
+        *   Cox, Russ - `Regular Expression Matching Can Be Simple And Fast -
+            Implementation: Compiling to NFA
+            <https://swtch.com/~rsc/regexp/regexp1.html>`_
 
-    :param regex: The regular expression to be compiled.
+    :param regex: The regular expression to compile.
     :return: A :class:`Fragment` that represents the compiled regular
         expression.
     :raises InvalidRegexError: If `regex` is determined to be an invalid infix
@@ -83,14 +86,14 @@ def compile_regex(regex: str) -> Fragment:
             # If a binary operator is read, there should be at least two
             # Fragments in the `nfa_stack`.
             if len(nfa_stack) < 2:
-                raise InvalidRegexError
+                raise InvalidRegexError(f"`{c}` operator requires two operands")
 
             # Pop two fragments off the stack
             frag1 = nfa_stack.pop()
             frag2 = nfa_stack.pop()
 
             if c == '.':
-                # Point frag2's accept state at frag1's start state
+                # Point frag2's accept state at frag1's start state.
                 frag2.accept.edges.append(frag1.start)
 
                 # Make frag2's start state the new start state & frag1's
@@ -98,7 +101,7 @@ def compile_regex(regex: str) -> Fragment:
                 start = frag2.start
                 accept = frag1.accept
             else:
-                # Create the new start & accept states, with the new start
+                # Create new start & accept states, with the new start
                 # state pointing to the start state of each fragment.
                 accept = State()
                 start = State(edges=[frag2.start, frag1.start])
@@ -110,22 +113,21 @@ def compile_regex(regex: str) -> Fragment:
             # If a unary operator is read, there should be at least one
             # Fragment in the `nfa_stack`.
             if len(nfa_stack) < 1:
-                raise InvalidRegexError
+                raise InvalidRegexError(f"`{c}` operator requires an operand")
 
-            frag = nfa_stack.pop()    # Pop a single fragment off the stack
+            frag = nfa_stack.pop()
 
-            accept = State()          # New accept state
+            accept = State()
 
             if c == '*':
-                # Create the new start state, which points to both the old
+                # Create the new start state, pointing to both the old
                 # start state and the new accept state.
                 start = State(edges=[frag.start, accept])
 
                 # Point the old fragment's accept to the new accept state.
                 frag.accept.edges = [frag.start, accept]
             elif c == '+':
-                # Create the new start state, which points to the old start
-                # state.
+                # The new start state points to the old start state.
                 start = State(edges=[frag.start])
 
                 # Point the old fragment's accept to the new accept state.
@@ -147,14 +149,13 @@ def compile_regex(regex: str) -> Fragment:
         new_frag = Fragment(start, accept)
         nfa_stack.append(new_frag)
 
-    # The `postfix` stack should now be empty & the NFA stack should only have
-    # one item on it.
+    # The stack should now only have one NFA Fragment on it.
     return nfa_stack.pop()
 
 
 def match(regex: str, s: str) -> bool:
     """
-    This function will return `True` if the regular expression `regexp`
+    This function will return `True` if the regular expression `regex`
     (fully) matches the string `s`, and `False` otherwise.
 
     :param regex: The regular expression to match.
@@ -174,7 +175,7 @@ def match(regex: str, s: str) -> bool:
     # Compile the regular expression into an NFA
     nfa = compile_regex(regex)
 
-    # Add the first state, and follow all arrows labelled with 
+    # Add the first state, and follow all arrows labelled by 
     # epsilon (the empty string).
     _follow_eps(nfa.start, current)
 
@@ -194,7 +195,7 @@ def match(regex: str, s: str) -> bool:
 def _follow_eps(state: State, current: set):
     """
     Adds a state to a set and follows all of the edges labelled by
-    EPSILON (ε).
+    EPSILON.
 
     :param state: A state to follow.
     :param current: A `set` of the currently visited states.
@@ -209,5 +210,5 @@ def _follow_eps(state: State, current: set):
     if state.label is EPSILON:
         # Loop through the states pointed to by this state & follow
         # all their EPSILON-labelled edges too
-        for vertex in state.edges:
-            _follow_eps(vertex, current)
+        for node in state.edges:
+            _follow_eps(node, current)

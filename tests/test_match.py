@@ -2,7 +2,7 @@
 
 import unittest
 
-# The following enables executing this module directly.
+# Enables executing this module directly.
 # Ref: Remi - https://stackoverflow.com/a/9806045
 import os
 import sys

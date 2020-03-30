@@ -1,7 +1,7 @@
 """
 Command Line Interface for the program.
 
-    **Options List**:
+    **Options List:**
         -h, --help      Shows a help message and then exits.
         -r, --regex     The regular expression to match.
         -t, --text      The string to match the regular expression against.
