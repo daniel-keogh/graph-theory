@@ -47,8 +47,9 @@
         
   <div class="section" id="module-match.regex">
 <span id="match-regex-module"></span><h1>match.regex module<a class="headerlink" href="#module-match.regex" title="Permalink to this headline">¶</a></h1>
-<p>This module provides functions for compiling a regular expression into an
-NFA and checking if that NFA matches a given search string.</p>
+<p>This module provides functions for compiling a regular expression into a
+non-deterministic finite automaton (NFA) and checking if that NFA matches
+a given search string.</p>
 <div class="section" id="supported-operators">
 <h2>Supported Operators<a class="headerlink" href="#supported-operators" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -76,7 +77,7 @@ in order to match the string “hello”).</dd>
 </div></blockquote>
 <dl class="exception">
 <dt id="match.regex.InvalidRegexError">
-<em class="property">exception </em><code class="descclassname">match.regex.</code><code class="descname">InvalidRegexError</code><span class="sig-paren">(</span><em>msg='Invalid regular expression'</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#match.regex.InvalidRegexError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="descclassname">match.regex.</code><code class="descname">InvalidRegexError</code><span class="sig-paren">(</span><em>msg='Invalid regular expression'</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/match/regex.html#InvalidRegexError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#match.regex.InvalidRegexError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code></p>
 <p>Raised to indicate a string is not a valid regular expression,
 and is therefore unable to be compiled into a NFA.</p>
@@ -84,26 +85,31 @@ and is therefore unable to be compiled into a NFA.</p>
 
 <dl class="function">
 <dt id="match.regex.compile_regex">
-<code class="descclassname">match.regex.</code><code class="descname">compile_regex</code><span class="sig-paren">(</span><em>regex: str</em><span class="sig-paren">)</span> &#x2192; match.states.Fragment<a class="headerlink" href="#match.regex.compile_regex" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">match.regex.</code><code class="descname">compile_regex</code><span class="sig-paren">(</span><em>regex: str</em><span class="sig-paren">)</span> &#x2192; match.states.Fragment<a class="reference internal" href="_modules/match/regex.html#compile_regex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#match.regex.compile_regex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles a given regular expression (in infix notation) to a NFA
 Fragment and returns it.</p>
 <p>The compilation process works by first converting <cite>regex</cite> to postfix
-notation and then scanning through the postfix expression, whilst
-maintaining a stack of computed NFA fragments. When a literal character is
-read, a new NFA fragment is pushed onto the stack. Operators meanwhile pop
-fragments off the stack (one fragment for unary operators &amp; two for binary
-operators) and then push a new fragment representing the result of the
-operation. At the end, a single NFA fragment remains which represents the
-compiled regular expression.</p>
+notation and then scanning through the postfix expression while
+maintaining a stack of computed NFA fragments. When a literal character
+is read, a new NFA fragment representing that character is pushed onto
+the stack. If an operator is read, fragments are popped off the stack
+(one fragment for unary operators &amp; two for binary operators) and then
+a new fragment representing the result of the operation is pushed back
+onto the stack. At the end, a single NFA <code class="xref py py-class docutils literal"><span class="pre">Fragment</span></code> is returned
+which represents the compiled regular expression.</p>
 <dl class="docutils">
-<dt><strong>References</strong>:</dt>
-<dd>Cox, Russ - <a class="reference external" href="https://swtch.com/~rsc/regexp/regexp1.html">Regular Expression Matching Can Be Simple And Fast</a></dd>
+<dt><strong>References &amp; Further Info:</strong></dt>
+<dd><ul class="first last simple">
+<li>Cox, Russ - <a class="reference external" href="https://swtch.com/~rsc/regexp/regexp1.html">Regular Expression Matching Can Be Simple And Fast -
+Implementation: Compiling to NFA</a></li>
+</ul>
+</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regex</strong> – The regular expression to be compiled.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regex</strong> – The regular expression to compile.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <code class="xref py py-class docutils literal"><span class="pre">Fragment</span></code> that represents the compiled regular
 expression.</td>
@@ -117,8 +123,8 @@ regular expression.</td>
 
 <dl class="function">
 <dt id="match.regex.match">
-<code class="descclassname">match.regex.</code><code class="descname">match</code><span class="sig-paren">(</span><em>regex: str</em>, <em>s: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#match.regex.match" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function will return <cite>True</cite> if the regular expression <cite>regexp</cite>
+<code class="descclassname">match.regex.</code><code class="descname">match</code><span class="sig-paren">(</span><em>regex: str</em>, <em>s: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/match/regex.html#match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#match.regex.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return <cite>True</cite> if the regular expression <cite>regex</cite>
 (fully) matches the string <cite>s</cite>, and <cite>False</cite> otherwise.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
