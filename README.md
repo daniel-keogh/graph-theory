@@ -30,13 +30,11 @@ on Thompson's Construction.
 
 ## Running
 
-### Usage
-
 ```sh
-match -r REGEX -t TEXT
+$ python3 -m match -r REGEX -t TEXT
 ```
 
-#### Command-Line Arguments
+### Command-Line Arguments
 
 | Argument | Description |
 | -------- | ---------- |

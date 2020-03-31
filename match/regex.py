@@ -163,7 +163,7 @@ def match(regex: str, s: str) -> bool:
     :return: `True` if the string `s` matches the regular expression, and
         `False` otherwise.
     :raises InvalidRegexError: If there is an error compiling the regular
-        expresion.
+        expression.
     :raises ValueError: If the regular expression is an empty string.
     """
 
