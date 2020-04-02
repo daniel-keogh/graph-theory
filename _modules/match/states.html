@@ -48,9 +48,9 @@
 
 <div class="viewcode-block" id="State"><a class="viewcode-back" href="../../match.states.html#match.states.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This class represents a state of a Non-deterministic finite automaton (NFA).</span>
+<span class="sd">    This class represents a state of a non-deterministic finite automaton (NFA).</span>
 
-<span class="sd">    Every State has 0, 1, or 2 edges from it.</span>
+<span class="sd">    Every State has a label, as well as 0, 1, or 2 edges branching from it.</span>
 
 <span class="sd">    :param label: The character represented by this State of the automaton. By</span>
 <span class="sd">        default each State is labelled by an ``EPSILON``.</span>
@@ -71,8 +71,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class represents a fragment of a non-deterministic finite automaton.</span>
 <span class="sd">    </span>
-<span class="sd">    A NFA fragment is composed of multiple states, each with a start :class:`State` and</span>
-<span class="sd">    an accept :class:`State`.</span>
+<span class="sd">    A NFA fragment is composed of multiple states, each with a start</span>
+<span class="sd">    :class:`State` and an accept :class:`State`.</span>
 
 <span class="sd">    :param start: The Fragment&#39;s start state.</span>
 <span class="sd">    :param accept: The Fragment&#39;s accept state.</span>

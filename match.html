@@ -71,13 +71,13 @@ string of text, using an algorithm known as Thompson’s construction.</p>
 a non-deterministic finite automaton (NFA). Like regular expressions, NFAs
 are a way of describing sets of character strings, and every valid regular
 expression will have an equivalent NFA that matches the same set of strings.</p>
-<p>The algorithm works by building small NFA fragments that represent part of a
-regular expression, and then composing larger NFAs from those smaller NFA
-fragments, with a different construction for each operator.</p>
+<p>Thompson’s algorithm works by building small NFA fragments that represent
+part of a regular expression, and then composing larger NFAs from those
+smaller NFA fragments, with a different construction for each operator.</p>
 <div class="section" id="performance">
 <h4>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h4>
-<p>Thompson’s algorithm offers a significant performance boost over the more
-complex real-world regular expression implementations used in programming
+<p>The algorithm offers a significant performance boost over the more
+complex, real-world regular expression implementations used in programming
 languages like Perl, Python, and others.</p>
 </div>
 </div>

@@ -57,11 +57,11 @@ a given search string.</p>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><code class="docutils literal"><span class="pre">.</span></code> - Concatenation. Note that this operator denotes <em>explicit</em></dt>
-<dd>concatenation. (e.g. The regular expression “h.e.l.l.o” is required
+<dd>concatenation (e.g. The regular expression “h.e.l.l.o” is required
 in order to match the string “hello”).</dd>
 </dl>
 </li>
-<li><code class="docutils literal"><span class="pre">|</span></code> - The OR operator represents alternation/union.</li>
+<li><code class="docutils literal"><span class="pre">|</span></code> - A vertical bar represents alternation/union.</li>
 <li><code class="docutils literal"><span class="pre">?</span></code> - Indicates an optional character (zero or one occurrences).</li>
 <li><dl class="first docutils">
 <dt><code class="docutils literal"><span class="pre">+</span></code> - The plus symbol indicates one or more occurrences of the</dt>
@@ -100,7 +100,7 @@ which represents the compiled regular expression.</p>
 <dl class="docutils">
 <dt><strong>References &amp; Further Info:</strong></dt>
 <dd><ul class="first last simple">
-<li>Cox, Russ - <a class="reference external" href="https://swtch.com/~rsc/regexp/regexp1.html">Regular Expression Matching Can Be Simple And Fast -
+<li>Cox, Russ - <a class="reference external" href="https://swtch.com/~rsc/regexp/regexp1.html#compiling">Regular Expression Matching Can Be Simple And Fast -
 Implementation: Compiling to NFA</a></li>
 </ul>
 </dd>
@@ -142,7 +142,7 @@ regular expression.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference internal" href="#match.regex.InvalidRegexError" title="match.regex.InvalidRegexError"><strong>InvalidRegexError</strong></a> – If there is an error compiling the regular
-expresion.</li>
+expression.</li>
 <li><strong>ValueError</strong> – If the regular expression is an empty string.</li>
 </ul>
 </td>

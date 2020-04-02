@@ -50,10 +50,10 @@
 <span class="sd">    The operators supported by this module are outlined below:</span>
 
 <span class="sd">    * ``.`` - Concatenation. Note that this operator denotes *explicit*</span>
-<span class="sd">        concatenation. (e.g. The regular expression &quot;h.e.l.l.o&quot; is required</span>
+<span class="sd">        concatenation (e.g. The regular expression &quot;h.e.l.l.o&quot; is required</span>
 <span class="sd">        in order to match the string &quot;hello&quot;).</span>
 
-<span class="sd">    * ``|`` - The OR operator represents alternation/union.</span>
+<span class="sd">    * ``|`` - A vertical bar represents alternation/union.</span>
 
 <span class="sd">    * ``?`` - Indicates an optional character (zero or one occurrences).</span>
 
@@ -102,7 +102,7 @@
 <span class="sd">    **References &amp; Further Info:**</span>
 <span class="sd">        *   Cox, Russ - `Regular Expression Matching Can Be Simple And Fast -</span>
 <span class="sd">            Implementation: Compiling to NFA</span>
-<span class="sd">            &lt;https://swtch.com/~rsc/regexp/regexp1.html&gt;`_</span>
+<span class="sd">            &lt;https://swtch.com/~rsc/regexp/regexp1.html#compiling&gt;`_</span>
 
 <span class="sd">    :param regex: The regular expression to compile.</span>
 <span class="sd">    :return: A :class:`Fragment` that represents the compiled regular</span>
@@ -126,9 +126,9 @@
 
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">):</span>
             <span class="c1"># If a binary operator is read, there should be at least two</span>
-            <span class="c1"># Fragments in the `nfa_stack`.</span>
+            <span class="c1"># Fragments on the `nfa_stack`.</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nfa_stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">InvalidRegexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{c}</span><span class="s2">` operator requires two operands&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">InvalidRegexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The `</span><span class="si">{c}</span><span class="s2">` operator requires two operands&quot;</span><span class="p">)</span>
 
             <span class="c1"># Pop two fragments off the stack</span>
             <span class="n">frag1</span> <span class="o">=</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -148,14 +148,14 @@
                 <span class="n">accept</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
                 <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag2</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">frag1</span><span class="o">.</span><span class="n">start</span><span class="p">])</span>
 
-                <span class="c1"># Point the old accept states at the new one.</span>
+                <span class="c1"># Point both the old accept states at the new one.</span>
                 <span class="n">frag2</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accept</span><span class="p">)</span>
                 <span class="n">frag1</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accept</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">):</span>
             <span class="c1"># If a unary operator is read, there should be at least one</span>
-            <span class="c1"># Fragment in the `nfa_stack`.</span>
+            <span class="c1"># Fragment on the `nfa_stack`.</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nfa_stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">InvalidRegexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{c}</span><span class="s2">` operator requires an operand&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">InvalidRegexError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The `</span><span class="si">{c}</span><span class="s2">` operator requires an operand&quot;</span><span class="p">)</span>
 
             <span class="n">frag</span> <span class="o">=</span> <span class="n">nfa_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
@@ -166,13 +166,15 @@
                 <span class="c1"># start state and the new accept state.</span>
                 <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">])</span>
 
-                <span class="c1"># Point the old fragment&#39;s accept to the new accept state.</span>
+                <span class="c1"># Point the old fragment&#39;s acceptor to both the new accept</span>
+                <span class="c1"># state, and the old start state.</span>
                 <span class="n">frag</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">:</span>
                 <span class="c1"># The new start state points to the old start state.</span>
                 <span class="n">start</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">])</span>
 
-                <span class="c1"># Point the old fragment&#39;s accept to the new accept state.</span>
+                <span class="c1"># Point the old fragment&#39;s acceptor to both the new accept</span>
+                <span class="c1"># state, and the old start state.</span>
                 <span class="n">frag</span><span class="o">.</span><span class="n">accept</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">frag</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">accept</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Create the new start state, which points to both the old</span>
@@ -205,7 +207,7 @@
 <span class="sd">    :return: `True` if the string `s` matches the regular expression, and</span>
 <span class="sd">        `False` otherwise.</span>
 <span class="sd">    :raises InvalidRegexError: If there is an error compiling the regular</span>
-<span class="sd">        expresion.</span>
+<span class="sd">        expression.</span>
 <span class="sd">    :raises ValueError: If the regular expression is an empty string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -236,8 +238,8 @@
 
 <span class="k">def</span> <span class="nf">_follow_eps</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="nb">set</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Adds a state to a set and follows all of the edges labelled by</span>
-<span class="sd">    EPSILON.</span>
+<span class="sd">    Adds the given :class:`State` to a set, and then follows all of that</span>
+<span class="sd">    state&#39;s ``EPSILON`` labelled edges.</span>
 
 <span class="sd">    :param state: A state to follow.</span>
 <span class="sd">    :param current: A `set` of the currently visited states.</span>
