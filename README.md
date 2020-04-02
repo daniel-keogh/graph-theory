@@ -10,14 +10,14 @@ can use the NFA to check if the regular expression matches a given string of tex
 The program uses an algorithm known as [Thompson's construction](https://en.wikipedia.org/wiki/Thompson%27s_construction),
 a method of transforming a regular expression into an equivalent NFA. The code works by composing small NFA fragments
 that represent part of the regular expression, and then proceeding to build larger NFAs from those smaller NFA fragments.
-If the given search string is accepted by the NFA, the program will output `True`, and
+If the given string is accepted by the NFA, the program will output `True`, and
 `False` otherwise.
 
 ### Operators
 
 The below operators/metacharacters are implemented:
 
-| Operator | Represents | NFA Fragment* |
+| Operator | Represents | NFA Fragment \* |
 | :------: | :--------- | :-----------: |
 | `.` | Concatenation. | ![concat] |
 | `\|` | Alternation/Union. | ![union] |
@@ -30,6 +30,8 @@ on Thompson's Construction.
 
 ## Running
 
+The program can be run as follows, using the `-m` argument in order to execute the `__main__.py` module.
+
 ```sh
 $ python3 -m match -r REGEX -t TEXT
 ```
@@ -38,7 +40,7 @@ $ python3 -m match -r REGEX -t TEXT
 
 | Argument | Description |
 | -------- | ---------- |
-| `-h/--help` | Prints some help text. |
+| `-h/--help` | Prints a help message and then exits. |
 | `-r/--regex` | The regular expression to match. |
 | `-t/--text` | The string of text you want to try and match against the pattern defined by the regular expression. |
 
@@ -46,7 +48,7 @@ $ python3 -m match -r REGEX -t TEXT
 
 ![Running Example][run]
 
-## Installing
+## Installing with pip
 
 From inside the root of the repository, run:
 
@@ -95,8 +97,8 @@ On Debian-based Linux distributions this can be done by running:
 $ sudo apt install python3-sphinx
 ```
 
-You should then be able to run `make html` from within the `docs/` directory to reproduce the HTML files, which are
-placed in the `docs/_build/html` directory.
+You should then be able to run `make html` from within the `docs/` directory to reproduce the HTML files, which will be
+placed in the `_build/html` directory.
 
 !["Sphinx Example"][docs]
 
