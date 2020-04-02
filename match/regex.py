@@ -8,10 +8,10 @@ Supported Operators
     The operators supported by this module are outlined below:
 
     * ``.`` - Concatenation. Note that this operator denotes *explicit*
-        concatenation. (e.g. The regular expression "h.e.l.l.o" is required
+        concatenation (e.g. The regular expression "h.e.l.l.o" is required
         in order to match the string "hello").
 
-    * ``|`` - The OR operator represents alternation/union.
+    * ``|`` - A vertical bar represents alternation/union.
 
     * ``?`` - Indicates an optional character (zero or one occurrences).
 
@@ -60,7 +60,7 @@ def compile_regex(regex: str) -> Fragment:
     **References & Further Info:**
         *   Cox, Russ - `Regular Expression Matching Can Be Simple And Fast -
             Implementation: Compiling to NFA
-            <https://swtch.com/~rsc/regexp/regexp1.html>`_
+            <https://swtch.com/~rsc/regexp/regexp1.html#compiling>`_
 
     :param regex: The regular expression to compile.
     :return: A :class:`Fragment` that represents the compiled regular
@@ -84,9 +84,9 @@ def compile_regex(regex: str) -> Fragment:
 
         if c in ('.', '|'):
             # If a binary operator is read, there should be at least two
-            # Fragments in the `nfa_stack`.
+            # Fragments on the `nfa_stack`.
             if len(nfa_stack) < 2:
-                raise InvalidRegexError(f"`{c}` operator requires two operands")
+                raise InvalidRegexError(f"The `{c}` operator requires two operands")
 
             # Pop two fragments off the stack
             frag1 = nfa_stack.pop()
@@ -106,14 +106,14 @@ def compile_regex(regex: str) -> Fragment:
                 accept = State()
                 start = State(edges=[frag2.start, frag1.start])
 
-                # Point the old accept states at the new one.
+                # Point both the old accept states at the new one.
                 frag2.accept.edges.append(accept)
                 frag1.accept.edges.append(accept)
         elif c in ('*', '+', '?'):
             # If a unary operator is read, there should be at least one
-            # Fragment in the `nfa_stack`.
+            # Fragment on the `nfa_stack`.
             if len(nfa_stack) < 1:
-                raise InvalidRegexError(f"`{c}` operator requires an operand")
+                raise InvalidRegexError(f"The `{c}` operator requires an operand")
 
             frag = nfa_stack.pop()
 
@@ -124,13 +124,15 @@ def compile_regex(regex: str) -> Fragment:
                 # start state and the new accept state.
                 start = State(edges=[frag.start, accept])
 
-                # Point the old fragment's accept to the new accept state.
+                # Point the old fragment's acceptor to both the new accept
+                # state, and the old start state.
                 frag.accept.edges = [frag.start, accept]
             elif c == '+':
                 # The new start state points to the old start state.
                 start = State(edges=[frag.start])
 
-                # Point the old fragment's accept to the new accept state.
+                # Point the old fragment's acceptor to both the new accept
+                # state, and the old start state.
                 frag.accept.edges = [frag.start, accept]
             else:
                 # Create the new start state, which points to both the old
@@ -194,8 +196,8 @@ def match(regex: str, s: str) -> bool:
 
 def _follow_eps(state: State, current: set):
     """
-    Adds a state to a set and follows all of the edges labelled by
-    EPSILON.
+    Adds the given :class:`State` to a set, and then follows all of that
+    state's ``EPSILON`` labelled edges.
 
     :param state: A state to follow.
     :param current: A `set` of the currently visited states.

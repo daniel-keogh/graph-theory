@@ -6,9 +6,9 @@ EPSILON = None
 
 class State:
     """
-    This class represents a state of a Non-deterministic finite automaton (NFA).
+    This class represents a state of a non-deterministic finite automaton (NFA).
 
-    Every State has 0, 1, or 2 edges from it.
+    Every State has a label, as well as 0, 1, or 2 edges branching from it.
 
     :param label: The character represented by this State of the automaton. By
         default each State is labelled by an ``EPSILON``.
@@ -29,8 +29,8 @@ class Fragment:
     """
     This class represents a fragment of a non-deterministic finite automaton.
     
-    A NFA fragment is composed of multiple states, each with a start :class:`State` and
-    an accept :class:`State`.
+    A NFA fragment is composed of multiple states, each with a start
+    :class:`State` and an accept :class:`State`.
 
     :param start: The Fragment's start state.
     :param accept: The Fragment's accept state.

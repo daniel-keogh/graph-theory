@@ -9,14 +9,14 @@ a non-deterministic finite automaton (NFA). Like regular expressions, NFAs
 are a way of describing sets of character strings, and every valid regular
 expression will have an equivalent NFA that matches the same set of strings.
 
-The algorithm works by building small NFA fragments that represent part of a
-regular expression, and then composing larger NFAs from those smaller NFA
-fragments, with a different construction for each operator.
+Thompson's algorithm works by building small NFA fragments that represent
+part of a regular expression, and then composing larger NFAs from those
+smaller NFA fragments, with a different construction for each operator.
 
 Performance
 -----------
-Thompson's algorithm offers a significant performance boost over the more
-complex real-world regular expression implementations used in programming
+The algorithm offers a significant performance boost over the more
+complex, real-world regular expression implementations used in programming
 languages like Perl, Python, and others.
 
 References & Further Info

@@ -5,12 +5,12 @@ Polish notation (RPN), a mathematical notation in which operators follow
 their operands.
 
 Expressions written in Reverse Polish can be easily interpreted by
-utilising a stack, and more efficient than the infix equivalent as only a
-single read over the expression is required in order to fully evaluate it,
-saving execution time & reducing computer memory access. Also, since the
-order of operations is determined solely by each operator's respective
-position in the expression, RPN does not use parentheses to specify the
-precedence of operators. Hence, they are omitted in the output.
+utilising a stack, and are more efficient than the infix equivalent as only
+a single read over the expression is required in order to fully evaluate it,
+reducing execution time & computer memory access. Also, since the order of
+operations is determined solely by each operator's position in the expression,
+RPN does not use parentheses to specify the precedence of operators. Hence,
+they are omitted in the output.
 
 **References & Further Info:**
     *   Computerphile - `Reverse Polish Notation and The Stack
@@ -86,8 +86,6 @@ def has_balanced_parens(exp: str) -> bool:
     Checks if the parentheses in the given expression `exp` are balanced,
     that is, if each opening parenthesis is matched by a corresponding
     closing parenthesis.
-
-    Only works for expressions parenthesised with ``( )``.
 
     **Example:**
     ::
