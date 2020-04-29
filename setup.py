@@ -7,6 +7,8 @@ Reference: https://github.com/pypa/sampleproject/blob/master/setup.py
 from setuptools import setup
 from os import path
 
+import match
+
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
@@ -15,13 +17,13 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="match",
-    version="1.0.0",
+    version=match.__version__,
     description="Check if a regular expression matches a string of text, using Thompson's Construction Algorithm.",
     long_description=read_me,
     long_description_content_type='text/markdown',
     url="https://github.com/daniel-keogh/graph-theory",
-    author="Daniel Keogh",
-    license="MIT",
+    author=match.__author__,
+    license=match.__license__,
     packages=["match"],
     entry_points={
         "console_scripts": [

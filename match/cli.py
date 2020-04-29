@@ -3,11 +3,14 @@ Command Line Interface for the program.
 
     **Options List:**
         -h, --help      Shows a help message and then exits.
+        -v, --version   Shows the program's version number then and exits.
         -r, --regex     The regular expression to match.
         -t, --text      The string to match the regular expression against.
 """
 
 import argparse
+
+from . import __version__
 
 
 def parse() -> argparse.Namespace:
@@ -25,6 +28,14 @@ def parse() -> argparse.Namespace:
         description="""Check if a regular expression matches a string of text, 
             using Thompson's Construction Algorithm.""",
         usage='match -r REGEX -t TEXT',
+    )
+
+    parser.version = __version__
+
+    parser.add_argument(
+        '-v',
+        '--version',
+        action='version'
     )
 
     parser.add_argument(

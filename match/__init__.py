@@ -24,3 +24,7 @@ References & Further Info
     *   Cox, Russ - `Regular Expression Matching Can Be Simple And Fast
         <https://swtch.com/~rsc/regexp/regexp1.html>`_
 """
+
+__author__ = "Daniel Keogh"
+__license__ = "MIT"
+__version__ = "1.0.0"
