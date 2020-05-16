@@ -41,6 +41,7 @@ $ python3 -m match -r REGEX -t TEXT
 | Argument | Description |
 | -------- | ---------- |
 | `-h/--help` | Prints a help message and then exits. |
+| `-v/--version` | Shows the program's version number then and exits. |
 | `-r/--regex` | The regular expression to match. |
 | `-t/--text` | The string of text you want to try and match against the pattern defined by the regular expression. |
 
@@ -73,7 +74,7 @@ Tests are located in the `tests/` directory.
 ### Run All Tests
 
 ```sh
-$ python3 -m unittest discover
+$ python3 -m unittest discover --verbose
 ```
 
 !["Testing Example"][tests]
@@ -114,7 +115,7 @@ followed by `sphinx-apidoc -o . ../match --separate` to create the RST files.
 
 [pip]: https://user-images.githubusercontent.com/37158241/80708607-e1e03d00-8ae3-11ea-95cb-239ddf52259c.PNG "PIP Install"
 
-[tests]: https://user-images.githubusercontent.com/37158241/76702524-5b51d680-66c2-11ea-9a2d-e62e9dcf23ce.PNG "Testing"
+[tests]: https://user-images.githubusercontent.com/37158241/82117563-b3f82b00-9768-11ea-8a72-61f49be8d8fc.PNG "Testing"
 
 [docs]: https://user-images.githubusercontent.com/37158241/76702668-75d87f80-66c3-11ea-9db0-50f4fc75f2b8.PNG "Sphinx Build"
 
