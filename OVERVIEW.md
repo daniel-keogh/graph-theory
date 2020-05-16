@@ -215,7 +215,7 @@ RPN does not use parentheses to specify the precedence of operators. Hence, they
 <!-- Images -->
 [versions]: https://user-images.githubusercontent.com/37158241/82095647-62638800-96f7-11ea-9209-acb64b3431de.png "Linux Versions"
 
-[win-path]: https://user-images.githubusercontent.com/37158241/82116458-ee11fe80-9761-11ea-848c-a468e449e14c.png "Windows Installation"
+[win-path]: https://user-images.githubusercontent.com/37158241/82117686-b7d87d00-9769-11ea-9655-c1ceee336901.png "Windows Installation"
 
 [repl]: https://user-images.githubusercontent.com/37158241/82095650-62fc1e80-96f7-11ea-8d2e-801c20f32d37.png "Python REPL"
 
