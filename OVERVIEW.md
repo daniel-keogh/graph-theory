@@ -26,11 +26,12 @@ expression matches that string. If the string is a match, `True` will be printed
 ### What are Regular Expressions?
 
 A regular expression is a sequence of characters that describes a search pattern. The characters in a regular expression can be either literal characters,
-with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit.
+with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\w` represents a single alphanumeric character.
 In this project only a handful of the most common metacharacters are implemented.
 
 Regular expressions have a wide variety of use-cases. For instance, they are commonly used in performing "find and replace" operations on files, wherein every
-string in a file that matches a given regex is replaced with another string. For example, the below gif demonstrates using a regular expression to remove parentheses around each word in a list.
+string in a file that matches a given regex is replaced with another string. For example, the below gif demonstrates using a regular expression to remove the parentheses
+around each word in a list.
 
 ![Find and Replace][find-and-replace]
 
@@ -256,7 +257,8 @@ solely by each operator's position in the expression, RPN does not use parenthes
 
 - Introduction to the Theory of Computation by Michael Sipser (3rd Edition) - The above sections about finite automata are adapted heavily from Chapter One of this book.
 
-- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html).
+- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html) - Provides a good explanation of Thompon's construction and it's
+advantages over real-world regex implementations built into many programming languages, including Python. The site also provides further information on DFAs and NFAs.
 
 - [Computerphile - Reverse Polish Notation and The Stack](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
 is useful in computation.
