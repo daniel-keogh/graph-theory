@@ -255,7 +255,7 @@ solely by each operator's position in the expression, RPN does not use parenthes
 
 | Infix Notation | Postfix Notation |
 | :------------: | :--------------: |
-| `(a|b).c*` | `ab|c*.` |
+| `(a\|b).c*` | `ab\|c*.` |
 
 ## References
 
