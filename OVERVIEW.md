@@ -29,8 +29,10 @@ A regular expression is a sequence of characters that describes a search pattern
 with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit.
 In this project only a handful of the most common metacharacters are implemented.
 
-Regular expressions have a wide variety of use-cases. For instance they are commonly used in performing "find and replace" operations on files, wherein every
-string in a file that matches a given regex is replaced with another string.
+Regular expressions have a wide variety of use-cases. For instance, they are commonly used in performing "find and replace" operations on files, wherein every
+string in a file that matches a given regex is replaced with another string. For example, the below gif demonstrates using a regular expression to remove parentheses around each word in a list.
+
+![Find and Replace][find-and-replace]
 
 ## Run
 
@@ -47,10 +49,8 @@ The Python interpreter is freely available on all major platforms and below I wi
 
 #### Linux
 
-If you are on Linux, chances are Python already comes prepackaged with whatever distribution you are using. However, just to be sure,
+If you are on Linux, chances are Python already comes pre-packaged with whatever distribution you are using. However, just to be sure,
 you can quickly check if it is installed by running `python3 --version`.
-
-![Check Python Version][version]
 
 Instructions for installing can vary depending on your distribution, but on Debian-based distros (Ubuntu, Linux Mint, etc.) you can easily install whatever version is in the
 repositories by running `sudo apt install python3`.
@@ -79,8 +79,6 @@ Since Windows does not ship with Python preinstalled you will need to install it
 
 1. Visit [python.org](https://www.python.org/downloads/) and download the latest version (currently 3.8.3).
 
-    ![Python Website][python-org]
-
 2. Launch the executable and follow the installation. **Make sure the checkbox "Add Python 3.8 to PATH" is ticked**.
 
     ![Windows Installation][win-path]
@@ -88,13 +86,13 @@ Since Windows does not ship with Python preinstalled you will need to install it
 #### Using Python
 
 You should now be able to execute Python scripts by simply running the `python` (or `python3` on Linux) command followed by the name of the script you want to run.
-By installing Python you will also have access to a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) enviroment, wherein you can execute simple Python commands.
+By installing Python you will also have access to a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) environment, wherein you can execute simple Python commands.
 
 ![Python REPL][repl]
 
 ### Running the Program
 
-After cloning the repository the program can be run as follows, using the `-m` argument in order to execute the code in the `__main__.py` module.
+After cloning the repository, the program can be run as follows, using the `-m` argument in order to execute the code in the `__main__.py` module.
 
 ```sh
 $ python3 -m match -r REGEX -t TEXT
@@ -156,7 +154,7 @@ In order to more adequately explain the algorithms in the code, it is necessary 
 
 ### Finite Automata
 
-Like regular expressions, finite automata are tools for describing patterns in text. In fact, any regular expression can be converted into an equivalant finite
+Like regular expressions, finite automata are tools for describing patterns in text. In fact, any regular expression can be converted into an equivalent finite
 automaton which recognises the same set of strings.
 
 A finite automaton is made up of several parts:
@@ -173,7 +171,7 @@ A finite automaton is made up of several parts:
 
 The above state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
 
-When the automaton recieves an input string we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol to a new state. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
+When the automaton receives an input string, we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol to a new state. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
 
 The below table is included to illustrate the result of reading the string "1011" over the automaton pictured above.
 
@@ -186,13 +184,13 @@ The below table is included to illustrate the result of reading the string "1011
 
 Because after reading the string "1011" the automaton is located in an accept state, we say the automaton accepts the string "1011".
 
-#### Non Determinism
+#### Non-Determinism
 
 The diagram above is an example of a *Deterministic* finite state automaton (DFA), but finite automata may also be *Nondeterministic* (NFA). The main differences between the two are as follows:
 
-- An NFA may have arrows labeled with members of either the input alphabet or with an epsilon (&epsilon;), which represents the empty string.
+- An NFA may have arrows labelled with members of either the input alphabet or with an epsilon (&epsilon;), which represents the empty string.
 - Every state of a DFA always has exactly one arrow for each symbol in the alphabet. In an NFA, a state may have zero, one, or many arrows for each input symbol.
-- Every NFA can be converted into an equivalant DFA, however constructing NFAs is typically easier.
+- Every NFA can be converted into an equivalent DFA, however constructing NFAs is typically easier.
 
 ##### Computing NFAs
 
@@ -220,7 +218,7 @@ we say the NFA accepts the input string.
 
 The main algorithm used in the program is known as [Thompson's construction](https://en.wikipedia.org/wiki/Thompson%27s_construction).
 
-As mentioned previously, any regular expression can be converted into an equivalant finite automaton which recognises the same set of strings. Thompsons's Construction is
+As mentioned previously, any regular expression can be converted into an equivalent finite automaton which recognises the same set of strings. Thompsons's Construction is
 a method of transforming a regular expression into its equivalent NFA.
 
 The algorithm works by building a series of small NFA *fragments* that represent part of a regular expression, and then composing larger NFAs from those smaller NFA fragments,
@@ -250,7 +248,7 @@ This algorithm is used to convert a given regular expression to postfix so it ca
 | :------------: | :--------------: |
 | `(a\|b).c*` | `ab\|c*.` |
 
-Expressions written in Reverse Polish can be easily interpreted by utilising a stack, and are more efficient than the infix equivalent as only a single
+Expressions written in Reverse Polish can be easily interpreted by utilising a stack and are more efficient than the infix equivalent as only a single
 read over the expression is required in order to fully evaluate it, reducing execution time & computer memory access. Also, since the order of operations is determined
 solely by each operator's position in the expression, RPN does not use parentheses to specify the precedence of operators. Hence, they are omitted in the output.
 
@@ -269,11 +267,13 @@ is useful in computation.
 
 - [RegexOne Interactive Tutorial](https://regexone.com/) - The best online tutorial I found for learning to use regular expressions.
 
+- [Debuggex](https://www.debuggex.com/) - Useful site which provides a visual representation of regular expressions.
+
 - [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - Site used for drawing the above automata diagrams. The diagrams are the same as the one's
 included in Chapter One of Sipser's book.
 
 <!-- GIFS -->
-[version]: https://user-images.githubusercontent.com/37158241/80839859-f3b10580-8bf3-11ea-9c93-c58503aea16f.gif "Checking Python Version"
+[find-and-replace]: https://user-images.githubusercontent.com/37158241/82161422-6a0c6380-9894-11ea-893c-c1b78650779d.gif "Find And Replace"
 
 [tests]: https://user-images.githubusercontent.com/37158241/80839857-f27fd880-8bf3-11ea-95da-6335b697e3d7.gif "Testing"
 
@@ -287,8 +287,6 @@ included in Chapter One of Sipser's book.
 [win-path]: https://user-images.githubusercontent.com/37158241/82117686-b7d87d00-9769-11ea-9655-c1ceee336901.png "Windows Installation"
 
 [repl]: https://user-images.githubusercontent.com/37158241/82095650-62fc1e80-96f7-11ea-8d2e-801c20f32d37.png "Python REPL"
-
-[python-org]: https://user-images.githubusercontent.com/37158241/82116460-ef432b80-9761-11ea-931a-18d25bb9810d.png "Python Website"
 
 <!-- DFA Images -->
 [dfa]: https://user-images.githubusercontent.com/37158241/82128921-ea5c9700-97b6-11ea-8ea2-710862c58698.png "DFA"
