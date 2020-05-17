@@ -20,8 +20,8 @@
 
 The purpose of this document is to provide an explanation of the project work contained in this repository, pitched at students in the year below.
 
-This repository contains a program written in the Python programming language that than can be used to determine if a regular expression matches a given string of text.
-If the string is a match, `True` will be printed to the console, and `False` will be printed otherwise.
+This repository contains a program written in the Python programming language that than can take a regular expression and a string from the command line and determine if the regular
+expression matches that string. If the string is a match, `True` will be printed to the console, and `False` will be printed otherwise.
 
 ### What are Regular Expressions?
 
@@ -41,7 +41,7 @@ In order to get started with running and testing the program you'll first need t
 > Python is an interpreted, interactive, object-oriented programming language.
 > It incorporates modules, exceptions, dynamic typing, very high level dynamic data types, and classes.
 > Python combines remarkable power with very clear syntax.
-> \- [General Python FAQ](https://docs.python.org/3/faq/general.html#general-information)
+> \- [*General Python FAQ*](https://docs.python.org/3/faq/general.html#general-information)
 
 The Python interpreter is freely available on all major platforms and below I will describe how you can get it set up on your own local machine.
 
@@ -152,7 +152,7 @@ $ python3 tests/[file_name].py
 
 ## Algorithms
 
-In order to more adequately explain the algorithms in the code, it is necessary to provide a brief primer on automata theory.
+In order to more adequately explain the algorithms in the code, it is necessary to provide a brief primer on finite automata.
 
 ### Finite Automata
 
@@ -161,7 +161,7 @@ automaton which recognises the same set of strings.
 
 A finite automaton is made up of several parts:
 
-- An "alphabet" that indicates the input symbols the automaton recognises.
+- An "alphabet", i.e. a set of input symbols the automaton recognises.
 - A set of states and rules for going from one state to another, depending on the input symbol.
 - A start state with an arrow pointing at it from nowhere.
 - A set of accept states, typically represented by a state with a double circle.
@@ -173,10 +173,9 @@ A finite automaton is made up of several parts:
 
 The above state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
 
-When the automaton recieves an input string we read each symbol in the string one by one, following the arrow labelled with the given input symbol to a new state. After reading the entire string,
-if we are located in an accept state (i.e. q1), we *accept* the string and if not, we *reject* it.
+When the automaton recieves an input string we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol to a new state. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
 
-The below table is included to attempt to illustrate the result of reading the string "1011" over the automaton pictured above.
+The below table is included to illustrate the result of reading the string "1011" over the automaton pictured above.
 
 | Input | Transition |
 | :---: | :--------: |
@@ -185,12 +184,11 @@ The below table is included to attempt to illustrate the result of reading the s
 |   1   | q2 &#8594; q1 |
 |   1   | q1 &#8594; q1 |
 
-Because after reading the string "1011" we are in an accept state, we say the automaton accepts the string "1011".
+Because after reading the string "1011" the automaton is located in an accept state, we say the automaton accepts the string "1011".
 
 #### Non Determinism
 
-The diagram above is an example of a *Deterministic* finite state automaton (DFA), but finite automata may also be *Nondeterministic* (NFA).
-The main differences between the two are as follows:
+The diagram above is an example of a *Deterministic* finite state automaton (DFA), but finite automata may also be *Nondeterministic* (NFA). The main differences between the two are as follows:
 
 - An NFA may have arrows labeled with members of either the input alphabet or with an epsilon (&epsilon;), which represents the empty string.
 - Every state of a DFA always has exactly one arrow for each symbol in the alphabet. In an NFA, a state may have zero, one, or many arrows for each input symbol.
@@ -198,24 +196,25 @@ The main differences between the two are as follows:
 
 ##### Computing NFAs
 
-![Non Deterministic Finite Automaton][nfa]
-
-As you can see from above, when reading a string over an NFA there may be multiple paths through which you could proceed for a given input character. For instance, if the
+As you can see from the below image, when reading a string over an NFA there may be multiple paths through which you could proceed for a given input character. For instance, if the
 input string was again "1011" there are two possible paths you could follow when reading the first character (q0 &#8594; q0 *or* q0 &#8594; q1).
 
+![Non Deterministic Finite Automaton][nfa]
+
 In order to compute such a string, the NFA will simply follow both paths simultaneously. It does this by splitting into multiple copies of itself, with each copy following
-one of the possible paths. Something similar happens whenever a state with an epsilon-labelled arrow is encountered. Without reading any further input, the machine will
+one of the possible paths. This also happens whenever a state with an epsilon-labelled arrow is encountered. Without reading any further input, the machine will
 automatically split into multiple copies of itself, with one copy following the epsilon-labelled arrow and the other remaining at the current state.
 
-If a given input symbol does not appear on any of the arrows exiting the state currently occupied by a copy of the machine, that copy of the machine dies.
-At the end of the input, if any of the remaining copies of the machine are in an accept state, we say the NFA accepts the input string.
+Each copy of the machine continues reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting from the state currently
+occupied by a given copy of the machine, that copy dies. At the end of the input, if there are any copies of the machine remaining and at least one of those are in an accept state,
+we say the NFA accepts the input string.
 
 > Nondeterminism may be viewed as a kind of parallel computation wherein
 > multiple independent "processes" or "threads" can be running concurrently.
 > When the NFA splits to follow several choices, that corresponds to a process
 > "forking" into several children, each proceeding separately. If at least one of
 > these processes accepts, then the entire computation accepts.
-> \- Michael Sipser, Introduction to the Theory of Computation (3rd Edition, ch.1, pg. 48).
+> \- *Michael Sipser, Introduction to the Theory of Computation (3rd Edition, ch.1, pg. 48)*.
 
 ### Thompson's Construction
 
@@ -229,7 +228,7 @@ with a different construction for each operator.
 
 #### Operators Supported
 
-The below operators/metacharacters are implemented:
+The below operators/metacharacters are implemented in the program and their associated NFA fragments are included in the below table:
 
 | Operator | Represents | NFA Fragment \* |
 | :------: | :--------- | :-----------: |
@@ -245,17 +244,15 @@ on Thompson's Construction.
 ### Shunting Yard Algorithm
 
 Dijkstra's Shunting Yard Algorithm is used for converting an infix expression to postfix, also known as Reverse Polish notation (RPN), a mathematical notation in which operators follow their operands.
-This algorithm is used to convert a given regular expression from infix to postfix so it can more easily be converted into an NFA using Thompson's algorithm.
-
-Expressions written in Reverse Polish can be easily interpreted by utilising a stack, and are more efficient than the infix equivalent as only a single
-read over the expression is required in order to fully evaluate it, reducing execution time & computer memory access. Also, since the order of operations is determined
-solely by each operator's position in the expression, RPN does not use parentheses to specify the precedence of operators. Hence, they are omitted in the output.
-
-#### Example
+This algorithm is used to convert a given regular expression to postfix so it can more efficiently be converted into an NFA using Thompson's algorithm.
 
 | Infix Notation | Postfix Notation |
 | :------------: | :--------------: |
 | `(a\|b).c*` | `ab\|c*.` |
+
+Expressions written in Reverse Polish can be easily interpreted by utilising a stack, and are more efficient than the infix equivalent as only a single
+read over the expression is required in order to fully evaluate it, reducing execution time & computer memory access. Also, since the order of operations is determined
+solely by each operator's position in the expression, RPN does not use parentheses to specify the precedence of operators. Hence, they are omitted in the output.
 
 ## References
 
