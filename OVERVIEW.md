@@ -155,8 +155,7 @@ In order to more adequately explain the algorithms in the code, it is necessary 
 
 ### Finite Automata
 
-Like regular expressions, finite automata are tools for describing patterns in text. In fact, any regular expression can be converted into an equivalent finite
-automaton which recognises the same set of strings.
+Like regular expressions, finite automata are tools for describing patterns in text. In fact, any regular expression can be converted into an equivalent finite automaton which recognises the same set of strings.
 
 A finite automaton is made up of several parts:
 
@@ -172,7 +171,7 @@ A finite automaton is made up of several parts:
 
 The above state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
 
-When the automaton receives an input string, we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol to a new state. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
+When the automaton receives an input string, we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
 
 The below table is included to illustrate the result of reading the string "1011" over the automaton pictured above.
 
@@ -204,7 +203,7 @@ In order to compute such a string, the NFA will simply follow both paths simulta
 one of the possible paths. This also happens whenever a state with an epsilon-labelled arrow is encountered. Without reading any further input, the machine will
 automatically split into multiple copies of itself, with one copy following the epsilon-labelled arrow and the other remaining at the current state.
 
-Each copy of the machine continues reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting from the state currently
+When there are multiple copies of an NFA, each copy of the machine will continue reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting from the state currently
 occupied by a given copy of the machine, that copy dies. At the end of the input, if there are any copies of the machine remaining and at least one of those are in an accept state,
 we say the NFA accepts the input string.
 
@@ -219,8 +218,7 @@ we say the NFA accepts the input string.
 
 The main algorithm used in the program is known as [Thompson's construction](https://en.wikipedia.org/wiki/Thompson%27s_construction).
 
-As mentioned previously, any regular expression can be converted into an equivalent finite automaton which recognises the same set of strings. Thompsons's Construction is
-a method of transforming a regular expression into its equivalent NFA.
+As mentioned previously, any regular expression can be converted into an equivalent finite automaton which recognises the same set of strings. Thompsons's construction is a method of transforming a regular expression into its equivalent NFA.
 
 The algorithm works by building a series of small NFA *fragments* that represent part of a regular expression, and then composing larger NFAs from those smaller NFA fragments,
 with a different construction for each operator.
@@ -258,7 +256,7 @@ solely by each operator's position in the expression, RPN does not use parenthes
 - Introduction to the Theory of Computation by Michael Sipser (3rd Edition) - The above sections about finite automata are adapted heavily from Chapter One of this book.
 
 - [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html) - Provides a good explanation of Thompon's construction and it's
-advantages over real-world regex implementations built into many programming languages, including Python. The site also provides further information on DFAs and NFAs.
+advantages over the real-world regex implementations built into many programming languages, including Python. The site also provides further information on DFAs and NFAs.
 
 - [Computerphile - Reverse Polish Notation and The Stack](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
 is useful in computation.
@@ -271,7 +269,7 @@ is useful in computation.
 
 - [Debuggex](https://www.debuggex.com/) - Useful site which provides a visual representation of regular expressions.
 
-- [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - Site used for drawing the above automata diagrams. The diagrams are the same as the one's
+- [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - The site I used for drawing the above automata diagrams. The diagrams are the same as the one's
 included in Chapter One of Sipser's book.
 
 <!-- GIFS -->
