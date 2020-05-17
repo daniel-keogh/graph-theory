@@ -10,10 +10,11 @@
     - [Installing with pip](#installing-with-pip)
 - [Testing](#testing)
 - [Algorithms](#algorithms)
-    - [Finite Automata Primer](#finite-automata-primer)
+    - [Finite Automata](#finite-automata)
     - [Thompson's Construction](#thompsons-construction)
     - [Shunting Yard Algorithm](#shunting-yard-algorithm)
-- [References and Further Materials](#references-and-materials)
+- [References](#references)
+    - [Further Materials](#further-materials)
 
 ## Introduction
 
@@ -24,13 +25,12 @@ If the string is a match, `True` will be printed to the console, and `False` wil
 
 ### What are Regular Expressions?
 
-A regular expression is a sequence of characters that describes a pattern of character strings. The characters in a regular expression can be either literal characters,
-with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit, while `\w` represents
-a single alphanumeric character. In this project only a handful of some of the most common metacharacters are implemented.
+A regular expression is a sequence of characters that describes a search pattern. The characters in a regular expression can be either literal characters,
+with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit.
+In this project only a handful of the most common metacharacters are implemented.
 
-Regular expressions have a wide variety of use-cases. For instance they can be used to used to perform user input validation (e.g. valitating emails, phone numbers, etc).
-They are also commonly used in performing "find and replace" operations on files, wherein every string in a file that matches a given regex is replaced with another string.
-Such a feature is available in many popular text editors like Visual Studio Code or Sublime Text.
+Regular expressions have a wide variety of use-cases. For instance they are commonly used in performing "find and replace" operations on files, wherein every
+string in a file that matches a given regex is replaced with another string.
 
 ## Run
 
@@ -154,15 +154,15 @@ $ python3 tests/[file_name].py
 
 In order to more adequately explain the algorithms in the code, it is necessary to provide a brief primer on automata theory.
 
-### Finite Automata Primer
+### Finite Automata
 
-Like regular expressions, finite automata are useful tools for recognising patterns in text. Any regular expression can be converted into an equivalant finite
+Like regular expressions, finite automata are tools for describing patterns in text. In fact, any regular expression can be converted into an equivalant finite
 automaton which recognises the same set of strings.
 
 A finite automaton is made up of several parts:
 
-- A set of states and rules for going from one state to another, depending on the input symbol.
 - An "alphabet" that indicates the input symbols the automaton recognises.
+- A set of states and rules for going from one state to another, depending on the input symbol.
 - A start state with an arrow pointing at it from nowhere.
 - A set of accept states, typically represented by a state with a double circle.
 - A set of arrows/edges going from one state to another. These arrows are also called transitions.
@@ -173,10 +173,10 @@ A finite automaton is made up of several parts:
 
 The above state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
 
-When the automaton recieves an input string we read each symbol in the string one by one, following the arrow labelled with the given input symbol. After reading the entire string,
+When the automaton recieves an input string we read each symbol in the string one by one, following the arrow labelled with the given input symbol to a new state. After reading the entire string,
 if we are located in an accept state (i.e. q1), we *accept* the string and if not, we *reject* it.
 
-The below table is included to attempt to illustrate the result of reading the string "10111" over the automaton pictured above.
+The below table is included to attempt to illustrate the result of reading the string "1011" over the automaton pictured above.
 
 | Input | Transition |
 | :---: | :--------: |
@@ -184,14 +184,13 @@ The below table is included to attempt to illustrate the result of reading the s
 |   0   | q1 &#8594; q2 |
 |   1   | q2 &#8594; q1 |
 |   1   | q1 &#8594; q1 |
-|   1   | q1 &#8594; q1 |
 
-Because after reading the string "10111" we are in an accept state, we say the automaton accepts the string "10111".
+Because after reading the string "1011" we are in an accept state, we say the automaton accepts the string "1011".
 
 #### Non Determinism
 
 The diagram above is an example of a *Deterministic* finite state automaton (DFA), but finite automata may also be *Nondeterministic* (NFA).
-The main difference between the two are as follows:
+The main differences between the two are as follows:
 
 - An NFA may have arrows labeled with members of either the input alphabet or with an epsilon (&epsilon;), which represents the empty string.
 - Every state of a DFA always has exactly one arrow for each symbol in the alphabet. In an NFA, a state may have zero, one, or many arrows for each input symbol.
@@ -202,14 +201,13 @@ The main difference between the two are as follows:
 ![Non Deterministic Finite Automaton][nfa]
 
 As you can see from above, when reading a string over an NFA there may be multiple paths through which you could proceed for a given input character. For instance, if the
-input string was again "10111" there are two possible paths you could follow when reading the first character (q0 &#8594; q0 *or* q0 &#8594; q1).
+input string was again "1011" there are two possible paths you could follow when reading the first character (q0 &#8594; q0 *or* q0 &#8594; q1).
 
 In order to compute such a string, the NFA will simply follow both paths simultaneously. It does this by splitting into multiple copies of itself, with each copy following
-one of the possible paths. If later there are again multiple possible paths, the machine will split once again. Something similar happens whenever a state with an epsilon-labelled
-arrow is encountered. Without reading any further input, the machine will automatically split into multiple copies of itself, with one following the epsilon-labelled arrow and
-the other remaining at the current state.
+one of the possible paths. Something similar happens whenever a state with an epsilon-labelled arrow is encountered. Without reading any further input, the machine will
+automatically split into multiple copies of itself, with one copy following the epsilon-labelled arrow and the other remaining at the current state.
 
-Finally, if a given input symbol does not appear on any of the arrows exiting the state currently occupied by a copy of the machine, that copy of the machine dies.
+If a given input symbol does not appear on any of the arrows exiting the state currently occupied by a copy of the machine, that copy of the machine dies.
 At the end of the input, if any of the remaining copies of the machine are in an accept state, we say the NFA accepts the input string.
 
 > Nondeterminism may be viewed as a kind of parallel computation wherein
@@ -226,13 +224,8 @@ The main algorithm used in the program is known as [Thompson's construction](htt
 As mentioned previously, any regular expression can be converted into an equivalant finite automaton which recognises the same set of strings. Thompsons's Construction is
 a method of transforming a regular expression into its equivalent NFA.
 
-Thompson's algorithm works by building small NFA fragments that represent part of a regular expression,
-and then composing larger NFAs from those smaller NFA fragments, with a different construction for each operator.
-
-#### Performance
-
-The algorithm offers a significant performance boost over the more complex, real-world regular expression implementations
-used in programming languages like Perl, Python, and many others.
+The algorithm works by building a series of small NFA *fragments* that represent part of a regular expression, and then composing larger NFAs from those smaller NFA fragments,
+with a different construction for each operator.
 
 #### Operators Supported
 
@@ -251,20 +244,36 @@ on Thompson's Construction.
 
 ### Shunting Yard Algorithm
 
-Dijkstra's Shunting Yard Algorithm is used for converting a regular expression written in infix notation to postfix,
-also known as Reverse Polish notation (RPN), a mathematical notation in which operators follow their operands.
+Dijkstra's Shunting Yard Algorithm is used for converting an infix expression to postfix, also known as Reverse Polish notation (RPN), a mathematical notation in which operators follow their operands.
+This algorithm is used to convert a given regular expression from infix to postfix so it can more easily be converted into an NFA using Thompson's algorithm.
 
 Expressions written in Reverse Polish can be easily interpreted by utilising a stack, and are more efficient than the infix equivalent as only a single
 read over the expression is required in order to fully evaluate it, reducing execution time & computer memory access. Also, since the order of operations is determined
 solely by each operator's position in the expression, RPN does not use parentheses to specify the precedence of operators. Hence, they are omitted in the output.
 
-## References and Further Materials
+#### Example
 
-- Introduction to the Theory of Computation by Michael Sipser (3rd Edition) - The above sections about automata theory are adapted heavily from Chapter One of this book.
+| Infix Notation | Postfix Notation |
+| :------------: | :--------------: |
+| `(a|b).c*` | `ab|c*.` |
+
+## References
+
+- Introduction to the Theory of Computation by Michael Sipser (3rd Edition) - The above sections about finite automata are adapted heavily from Chapter One of this book.
+
+- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html).
+
+- [Computerphile - Reverse Polish Notation and The Stack](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
+is useful in computation.
+
+- [Wikipedia - Reverse Polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) - Explanation of Reverse Polish Notation.
+
+### Further Materials
 
 - [RegexOne Interactive Tutorial](https://regexone.com/) - The best online tutorial I found for learning to use regular expressions.
 
-- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html).
+- [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - Site used for drawing the above automata diagrams. The diagrams are the same as the one's
+included in Chapter One of Sipser's book.
 
 <!-- GIFS -->
 [version]: https://user-images.githubusercontent.com/37158241/80839859-f3b10580-8bf3-11ea-9c93-c58503aea16f.gif "Checking Python Version"
