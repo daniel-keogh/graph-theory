@@ -45,11 +45,14 @@
 
 <span class="sd">    **Options List:**</span>
 <span class="sd">        -h, --help      Shows a help message and then exits.</span>
+<span class="sd">        -v, --version   Shows the program&#39;s version number then and exits.</span>
 <span class="sd">        -r, --regex     The regular expression to match.</span>
 <span class="sd">        -t, --text      The string to match the regular expression against.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">__version__</span>
 
 
 <div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../match.cli.html#match.cli.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">:</span>
@@ -67,6 +70,14 @@
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Check if a regular expression matches a string of text, </span>
 <span class="s2">            using Thompson&#39;s Construction Algorithm.&quot;&quot;&quot;</span><span class="p">,</span>
         <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;match -r REGEX -t TEXT&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">__version__</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-v&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--version&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;version&#39;</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
