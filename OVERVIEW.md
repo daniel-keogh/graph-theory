@@ -26,11 +26,11 @@ expression matches that string. If the string is a match, `True` will be printed
 ### What are Regular Expressions?
 
 A regular expression is a sequence of characters that describes a search pattern. The characters in a regular expression can be either literal characters,
-with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\w` represents a single alphanumeric character.
-In this project only a handful of the most common metacharacters are implemented.
+with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit, while `\w` represents a
+single alphanumeric character. In this project only a handful of the most common metacharacters are implemented (see: [Operators Supported](#operators-supported)).
 
 Regular expressions have a wide variety of use-cases. For instance, they are commonly used in performing "find and replace" operations on files, wherein every
-string in a file that matches a given regex is replaced with another string. For example, the below gif demonstrates using a regular expression to remove the parentheses
+string in a file that matches a given regex is replaced by another string. For example, the below GIF demonstrates using a simple regular expression to remove the parentheses
 around each word in a list.
 
 ![Find and Replace][find-and-replace]
@@ -200,11 +200,11 @@ input string was again "1011" there are two possible paths you could follow when
 ![Non Deterministic Finite Automaton][nfa]
 
 In order to compute such a string, the NFA will simply follow both paths simultaneously. It does this by splitting into multiple copies of itself, with each copy following
-one of the possible paths. This also happens whenever a state with an epsilon-labelled arrow is encountered. Without reading any further input, the machine will
+one of the possible paths. This also happens whenever a state with an epsilon-labelled arrow is encountered: Without reading any further input, the machine will
 automatically split into multiple copies of itself, with one copy following the epsilon-labelled arrow and the other remaining at the current state.
 
-When there are multiple copies of an NFA, each copy of the machine will continue reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting from the state currently
-occupied by a given copy of the machine, that copy dies. At the end of the input, if there are any copies of the machine remaining and at least one of those are in an accept state,
+When there are multiple copies of an NFA, each copy of the machine will continue reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting the state currently
+occupied by a given copy of the machine, that copy dies. After reading the input, if there are any copies of the machine remaining and at least one of those are in an accept state,
 we say the NFA accepts the input string.
 
 > Nondeterminism may be viewed as a kind of parallel computation wherein
@@ -225,7 +225,7 @@ with a different construction for each operator.
 
 #### Operators Supported
 
-The below operators/metacharacters are implemented in the program and their associated NFA fragments are included in the below table:
+The below operators/metacharacters are implemented in the program and their corresponding NFA fragments are included in the below table:
 
 | Operator | Represents | NFA Fragment \* |
 | :------: | :--------- | :-----------: |
@@ -241,7 +241,7 @@ on Thompson's Construction.
 ### Shunting Yard Algorithm
 
 Dijkstra's Shunting Yard Algorithm is used for converting an infix expression to postfix, also known as Reverse Polish notation (RPN), a mathematical notation in which operators follow their operands.
-This algorithm is used to convert a given regular expression to postfix so it can more efficiently be converted into an NFA using Thompson's algorithm.
+This algorithm was used in the project in order to convert a given regular expression to postfix so it can more efficiently be converted into an NFA using Thompson's algorithm.
 
 | Infix Notation | Postfix Notation |
 | :------------: | :--------------: |
@@ -258,10 +258,12 @@ solely by each operator's position in the expression, RPN does not use parenthes
 - [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html) - Provides a good explanation of Thompon's construction and it's
 advantages over the real-world regex implementations built into many programming languages, including Python. The site also provides further information on DFAs and NFAs.
 
-- [Computerphile - Reverse Polish Notation and The Stack](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
+- [Reverse Polish Notation and The Stack - Computerphile](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
 is useful in computation.
 
-- [Wikipedia - Reverse Polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation) - Explanation of Reverse Polish Notation.
+- [Reverse Polish notation- Wikipedia](https://en.wikipedia.org/wiki/Reverse_Polish_notation) - Summary of Reverse Polish Notation.
+
+- [Regular expression - Wikipedia](https://en.wikipedia.org/wiki/Regular_expression) - Wiki article which provides a good explanation of regular expressions, their applications, and syntax.
 
 ### Further Materials
 
@@ -271,6 +273,8 @@ is useful in computation.
 
 - [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - The site I used for drawing the above automata diagrams. The diagrams are the same as the one's
 included in Chapter One of Sipser's book.
+
+- [GitHub Pages](https://daniel-keogh.github.io/graph-theory/) - The user documentation for this project is deployed on GitHub Pages.
 
 <!-- GIFS -->
 [find-and-replace]: https://user-images.githubusercontent.com/37158241/82161422-6a0c6380-9894-11ea-893c-c1b78650779d.gif "Find And Replace"
@@ -288,12 +292,12 @@ included in Chapter One of Sipser's book.
 
 [repl]: https://user-images.githubusercontent.com/37158241/82095650-62fc1e80-96f7-11ea-8d2e-801c20f32d37.png "Python REPL"
 
-<!-- DFA Images -->
+<!-- DFA/NFA Images -->
 [dfa]: https://user-images.githubusercontent.com/37158241/82128921-ea5c9700-97b6-11ea-8ea2-710862c58698.png "DFA"
 
 [nfa]: https://user-images.githubusercontent.com/37158241/82148091-1f65f980-984a-11ea-83f4-8aaf24173eff.png "NFA"
 
-<!-- NFA Images -->
+<!-- Fragment Images -->
 [union]: https://user-images.githubusercontent.com/37158241/76761641-b13c8200-6787-11ea-8821-7d3c31744855.png "Union"
 
 [kleene]: https://user-images.githubusercontent.com/37158241/76747391-f6a18500-6770-11ea-8104-1d70db17d268.png "Kleene Star"
