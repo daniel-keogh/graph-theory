@@ -58,8 +58,8 @@ repositories by running `sudo apt install python3`.
 
 ##### Installing Newer Versions
 
-Often the version of Python that is in the repositories may be older than the current stable release. For example, on my Ubuntu 18.04 installation the version in the repos is 3.6.9,
-whereas the latest version is 3.8.3. To get the very latest version you can add the "deadsnakes" Personal Package Archive (PPA).
+Often the version of Python that is in the repositories may be older than the current stable release. For example, on my Ubuntu installation the version in the repos is 3.6.9,
+whereas the latest version is 3.8.3. To get the very latest version you can add the [deadsnakes](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa) Personal Package Archive (PPA).
 
 ```sh
 $ sudo apt install software-properties-common
@@ -161,17 +161,17 @@ A finite automaton is made up of several parts:
 
 - An "alphabet", i.e. a set of input symbols the automaton recognises.
 - A set of states and rules for going from one state to another, depending on the input symbol.
-- A start state with an arrow pointing at it from nowhere.
+- A start state, with an arrow pointing at it from nowhere.
 - A set of accept states, typically represented by a state with a double circle.
 - A set of arrows/edges going from one state to another. These arrows are also called transitions.
 
 #### Example
 
+The below state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
+
 ![Finite Automaton][dfa]
 
-The above state diagram has three states, `{q0, q1, q2}` and accepts strings over the alphabet `{0, 1}`.
-
-When the automaton receives an input string, we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
+When an automaton receives an input string, we read each symbol in the string one by one, following the arrow labelled with the corresponding symbol. After reading the entire string, if we are located in an accept state (i.e. q1), we *accept* the input string and if not, we *reject* it.
 
 The below table is included to illustrate the result of reading the string "1011" over the automaton pictured above.
 
@@ -182,7 +182,7 @@ The below table is included to illustrate the result of reading the string "1011
 |   1   | q2 &#8594; q1 |
 |   1   | q1 &#8594; q1 |
 
-Because after reading the string "1011" the automaton is located in an accept state, we say the automaton accepts the string "1011".
+Because after reading the string "1011" the automaton is located in an accept state, we say this automaton accepts the string "1011".
 
 #### Non-Determinism
 
@@ -194,7 +194,7 @@ The diagram above is an example of a *Deterministic* finite state automaton (DFA
 
 ##### Computing NFAs
 
-As you can see from the below image, when reading a string over an NFA there may be multiple paths through which you could proceed for a given input character. For instance, if the
+As you can see from the below image, when reading a string over an NFA there may be multiple paths through which you could proceed for a given input symbol. For instance, if the
 input string was again "1011" there are two possible paths you could follow when reading the first character (q0 &#8594; q0 *or* q0 &#8594; q1).
 
 ![Non Deterministic Finite Automaton][nfa]
