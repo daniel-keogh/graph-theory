@@ -20,17 +20,17 @@
 
 The purpose of this document is to provide an explanation of the project work contained in this repository, pitched at students in the year below.
 
-This repository contains a program written in the Python programming language that than can take a regular expression and a string from the command line and determine if the regular
+This repository contains a program written in the Python programming language that can take a regular expression and a string from the command line and determine if the regular
 expression matches that string. If the string is a match, `True` will be printed to the console, and `False` will be printed otherwise.
 
 ### What are Regular Expressions?
 
 A regular expression is a sequence of characters that describes a search pattern. The characters in a regular expression can be either literal characters,
-with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit, while `\w` represents a
-single alphanumeric character. In this project only a handful of the most common metacharacters are implemented (see: [Operators Supported](#operators-supported)).
+with no special meaning, or so-called *metacharacters* which describe certain sets of characters. For instance, the metacharacter `\d` represents a digit, while `\w` represents an
+alphanumeric character. In this project only a handful of the most common metacharacters are implemented (see: [Operators Supported](#operators-supported)).
 
 Regular expressions have a wide variety of use-cases. For instance, they are commonly used in performing "find and replace" operations on files, wherein every
-string in a file that matches a given regex is replaced by another string. For example, the below GIF demonstrates using a simple regular expression to remove the parentheses
+string in a file that matches a given regex is replaced by another string. For example, the below GIF demonstrates using a very simple regular expression to remove the parentheses
 around each word in a list.
 
 ![Find and Replace][find-and-replace]
@@ -108,13 +108,13 @@ $ python3 -m match -r REGEX -t TEXT
 | `-r/--regex` | The regular expression to match. |
 | `-t/--text` | The string of text you want to try and match against the pattern defined by the regular expression. |
 
-##### Example
+##### Example Usage
 
 ![Running Example][run]
 
 ### Installing with pip
 
-pip is the package management system used by Python and can be used to install third-party packages from [Python Package Index (PyPI)](https://pypi.org/).
+pip is the package management system used by Python and is used to install third-party packages from [Python Package Index (PyPI)](https://pypi.org/).
 You can also use pip to install this package locally on your machine. Doing so will allow you to run the program system-wide, whilst omitting the `python3 -m`.
 
 To install the package with pip, run the following from inside the root of the repository:
@@ -151,7 +151,7 @@ $ python3 tests/[file_name].py
 
 ## Algorithms
 
-In order to more adequately explain the algorithms in the code, it is necessary to provide a brief primer on finite automata.
+In order to more adequately explain the algorithms in the code, it is necessary to provide some background on finite automata.
 
 ### Finite Automata
 
@@ -162,7 +162,7 @@ A finite automaton is made up of several parts:
 - An "alphabet", i.e. a set of input symbols the automaton recognises.
 - A set of states and rules for going from one state to another, depending on the input symbol.
 - A start state, with an arrow pointing at it from nowhere.
-- A set of accept states, typically represented by a state with a double circle.
+- A set of accept states, typically represented by double circles.
 - A set of arrows/edges going from one state to another. These arrows are also called transitions.
 
 #### Example
@@ -203,7 +203,7 @@ In order to compute such a string, the NFA will simply follow both paths simulta
 one of the possible paths. This also happens whenever a state with an epsilon-labelled arrow is encountered: Without reading any further input, the machine will
 automatically split into multiple copies of itself, with one copy following the epsilon-labelled arrow and the other remaining at the current state.
 
-When there are multiple copies of an NFA, each copy of the machine will continue reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting the state currently
+Whenever there are multiple copies of an NFA, each copy of the machine will continue reading the input string in parallel, however if a given symbol does not appear on any of the arrows exiting the state currently
 occupied by a given copy of the machine, that copy dies. After reading the input, if there are any copies of the machine remaining and at least one of those are in an accept state,
 we say the NFA accepts the input string.
 
@@ -253,15 +253,16 @@ solely by each operator's position in the expression, RPN does not use parenthes
 
 ## References
 
-- Introduction to the Theory of Computation by Michael Sipser (3rd Edition) - The above sections about finite automata are adapted heavily from Chapter One of this book.
+- *Introduction to the Theory of Computation* by Michael Sipser (3rd Edition) - The above sections about finite automata are adapted heavily from Chapter One of this book.
 
-- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html) - Provides a good explanation of Thompon's construction and it's
-advantages over the real-world regex implementations built into many programming languages, including Python. The site also provides further information on DFAs and NFAs.
+- [Regular Expression Matching Can Be Simple And Fast - Russ Cox](https://swtch.com/~rsc/regexp/regexp1.html) - Provides a good explanation of Thompson's construction algorithm and its
+advantages over the real-world regex implementations built into many programming languages, including Python. The author also provides further information on finite automata, as well as an
+example implementation of Thompson's algorithm written in the C programming language.
 
 - [Reverse Polish Notation and The Stack - Computerphile](https://www.youtube.com/watch?v=7ha78yWRDlE) - Provides a good explanation of Reverse Polish Notation and why it
-is useful in computation.
+is useful in Computer Science. He also demonstrates how to convert an expression from infix to postfix using a stack.
 
-- [Reverse Polish notation- Wikipedia](https://en.wikipedia.org/wiki/Reverse_Polish_notation) - Summary of Reverse Polish Notation.
+- [Reverse Polish notation- Wikipedia](https://en.wikipedia.org/wiki/Reverse_Polish_notation) - Used to help me summarise Reverse Polish Notation above.
 
 - [Regular expression - Wikipedia](https://en.wikipedia.org/wiki/Regular_expression) - Wiki article which provides a good explanation of regular expressions, their applications, and syntax.
 
@@ -269,12 +270,12 @@ is useful in computation.
 
 - [RegexOne Interactive Tutorial](https://regexone.com/) - The best online tutorial I found for learning to use regular expressions.
 
-- [Debuggex](https://www.debuggex.com/) - Useful site which provides a visual representation of regular expressions.
+- [Debuggex](https://www.debuggex.com/) - Useful site which provides a visual representation of a given regular expression.
 
 - [Finite State Machine Designer](http://www.madebyevan.com/fsm/) - The site I used for drawing the above automata diagrams. The diagrams are the same as the one's
 included in Chapter One of Sipser's book.
 
-- [GitHub Pages](https://daniel-keogh.github.io/graph-theory/) - The user documentation for this project is deployed on GitHub Pages.
+- [GitHub Pages](https://daniel-keogh.github.io/graph-theory/) - The user documentation for this project.
 
 <!-- GIFS -->
 [find-and-replace]: https://user-images.githubusercontent.com/37158241/82161422-6a0c6380-9894-11ea-893c-c1b78650779d.gif "Find And Replace"
@@ -290,7 +291,7 @@ included in Chapter One of Sipser's book.
 
 [win-path]: https://user-images.githubusercontent.com/37158241/82117686-b7d87d00-9769-11ea-9655-c1ceee336901.png "Windows Installation"
 
-[repl]: https://user-images.githubusercontent.com/37158241/82095650-62fc1e80-96f7-11ea-8d2e-801c20f32d37.png "Python REPL"
+[repl]: https://user-images.githubusercontent.com/37158241/82235442-a094bd80-992a-11ea-8fb6-f55efb8637fd.png "Python REPL"
 
 <!-- DFA/NFA Images -->
 [dfa]: https://user-images.githubusercontent.com/37158241/82128921-ea5c9700-97b6-11ea-8ea2-710862c58698.png "DFA"
